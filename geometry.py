@@ -1,3 +1,14 @@
+"""
+This is the Geometry module.
+
+Geometry module defines the basic shapes, such as 
+1D: Interval 
+2D: Rectangle, Triangle, etc.
+
+Geometry module defines the construction of the geometry.
+"""
+
+
 class Shape:  # Shape does not sound like a top level class
     def __init__(self, label):
         self.label = label
