@@ -8,6 +8,8 @@ Geometry module defines the basic shapes, such as
 Geometry module defines the construction of the geometry.
 """
 
+import matplotlib.pyplot as plt
+import matplotlib.patches as patch
 
 class Shape:
     """Init the Shape."""
@@ -69,6 +71,8 @@ class Rectangle(Shape):
         """
         self.bl = bottom_left
         self.ur = up_right
+        self.width = self.ur[0] - self.bl[0]
+        self.height = self.ur[1] - self.bl[1]
         self.type = 'Rectangle'
 
     def __str__(self):
@@ -147,3 +151,33 @@ class Geometry:
         res = False
         posn_label = self.get_label(posn)
         return res or (posn_label == label)
+    
+    def plot(self, figsize=(8, 8), dpi=300):
+        """
+        Plot the geometry.
+        
+        figsize: unit in inch, (2, ) tuple, determine the fig/canvas size
+        dpi: dimless, int, Dots Per Inch
+        """
+        fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
+                         constrained_layout=True)
+        ax = axes[0]
+        for shape in self.sequence:
+            if shape.type == 'Rectangle':
+                ax.add_patch(
+                    patch.Rectangle(shape.bl, shape.width, shape.height,
+                                    edgecolor='k'))
+        plt.show()
+                
+if __name__ == '__main__':
+    import numpy as np
+    icp2d = Geometry(dim=2, is_cyl=False)
+    plasma = Rectangle(np.array([0.0, 0.0]), np.array([1.0, 2.0]))
+    icp2d.add_shape(plasma)
+    top = Rectangle(np.array([0.0, 1.9]), np.array([1.0, 2.0]))
+    icp2d.add_shape(top)
+    bott = Rectangle(np.array([0.0, 0.0]), np.array([1.0, 0.1]))
+    icp2d.add_shape(bott)
+    wall = Rectangle(np.array([0.9, 0.0]), np.array([0.0, 2.0]))
+    icp2d.add_shape(wall)
+    icp2d.plot()
