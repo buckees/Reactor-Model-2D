@@ -9,7 +9,7 @@ Geometry module defines the construction of the geometry.
 """
 
 
-class Shape:  # Shape does not sound like a top level class
+class Shape:
     def __init__(self, label):
         self.label = label
 
@@ -18,16 +18,20 @@ class Shape:  # Shape does not sound like a top level class
 
 
 class Interval(Shape):
-    def __init__(self, label, begin, end, axis=0):
-        # since label is already defined in Shape, is label here duplicate?
-        super().__init__(label)  # what does super mean? super() vs. no super()
+    """
+    Interval is a 1D basic shape.
+    
+    begin: unit in m, var
+    end: unit in m, var
+    axis: ???
+    """
+    def __init__(self, begin, end, axis=0):
         self.begin = begin
         self.end = end
         self.axis = axis
 
     def __str__(self):
         res = 'Interval:'
-        res += '\n' + super().__str__()
         res += f'\nbegin = {self.begin}'
         res += f'\nend = {self.end}'
         res += f'\naxis = {self.axis}'
