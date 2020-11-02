@@ -117,15 +117,22 @@ class Geometry:
         """
         self.sequence.append(shape)
 
-    def get_label(self, posn):  # overlap?
+    def get_label(self, posn):
+        """
+        Return the label of a position.
+        
+        posn: unit in m, var or (2, ) array, position as input
+        label: str, var, label of the shape
+        """
         label = None
         for shape in self.sequence:
             if posn in shape:
                 label = shape.label
         return label
 
-    def find_in_label(self, posn, label):  # ??? don't understand
+    def label_check(self, posn, label):
         res = False
+        
         for shape in self.sequence:
             if shape.label == label:
                 res = res or (posn in shape)
