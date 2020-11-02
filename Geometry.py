@@ -107,7 +107,14 @@ class Geometry:
             res += '\n' + str(shape)
         return res
 
-    def add_shape(self, shape):  # is this shape a class?
+    def add_shape(self, shape):
+        """
+        Add shape to the geometry.
+        
+        shape: class
+        1D - shape is an instance of Interval()
+        2D - shape is an instance of Rectangle()
+        """
         self.sequence.append(shape)
 
     def get_label(self, posn):  # overlap?
