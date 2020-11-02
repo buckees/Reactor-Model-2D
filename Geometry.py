@@ -98,8 +98,9 @@ class Geometry:
         self.sequence = list()
 
     def __str__(self):
+        """Print Geometry info."""
         res = f'Geometry dimension {self.dim}D'
-        if self.iscyl:
+        if self.is_cyl:
             res += ' cylindrical'
         res += '\nGeometry sequence:'
         for shape in self.sequence:
