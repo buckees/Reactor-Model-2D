@@ -1,5 +1,5 @@
 """
-This is the Geometry module.
+Geometry module.
 
 Geometry module defines the basic shapes, such as 
 1D: Interval 
@@ -10,10 +10,13 @@ Geometry module defines the construction of the geometry.
 
 
 class Shape:
+    """Init the Shape."""
+    
     def __init__(self, label):
         self.label = label
 
     def __str__(self):
+        """Print Shape info."""
         return f'label = {self.label}'
 
 
@@ -138,6 +141,7 @@ class Geometry:
         posn: unit in m, var or (2, ) array, position as input
         label: str, var, label as input
         """
+        # cannot determined if the posn is in domain
         res = False
         posn_label = self.get_label(posn)
         return res or (posn_label == label)
