@@ -124,6 +124,7 @@ class Geometry:
         posn: unit in m, var or (2, ) array, position as input
         label: str, var, label of the shape
         """
+        # what if return None
         label = None
         for shape in self.sequence:
             if posn in shape:
@@ -131,9 +132,12 @@ class Geometry:
         return label
 
     def label_check(self, posn, label):
-        res = False
+        """
+        Check if labelf of posn == label of input.
         
-        for shape in self.sequence:
-            if shape.label == label:
-                res = res or (posn in shape)
-        return res
+        posn: unit in m, var or (2, ) array, position as input
+        label: str, var, label as input
+        """
+        res = False
+        posn_label = self.get_label(posn)
+        return res or (posn_label == label)
