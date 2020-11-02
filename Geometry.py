@@ -34,6 +34,7 @@ class Interval(Shape):
         self.begin = begin
         self.end = end
         self.axis = axis
+        self.type = 'Interval'
 
     def __str__(self):
         """Print Interval info."""
@@ -68,6 +69,7 @@ class Rectangle(Shape):
         """
         self.bl = bottom_left
         self.ur = up_right
+        self.type = 'Rectangle'
 
     def __str__(self):
         """Print Rectangle info."""
