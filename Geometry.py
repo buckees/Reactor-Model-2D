@@ -44,7 +44,7 @@ class Interval(Shape):
         """
         Determind if a position is inside the Interval.
         
-        posn: unit in m, var or 1D array, position as input
+        posn: unit in m, var, position as input
         boundaries are not consindered as "Inside"
         """
         return self.begin < posn[self.axis] < self.end
@@ -60,8 +60,8 @@ class Rectangle(Shape):
         """
         Init the Rectangle.
         
-        bottom_left: unit in m, 2-item list, [x, y]
-        up_right: unit in m, 2-item list, [x, y]
+        bottom_left: unit in m, (2, ) array
+        up_right: unit in m, (2, ) array
         """
         self.bl = bottom_left
         self.ur = up_right
@@ -77,11 +77,10 @@ class Rectangle(Shape):
         """
         Determind if a position is inside the Interval.
         
-        posn: unit in m, 2-item list or 2D array, position as input
+        posn: unit in m, (2, ) array, position as input
         boundaries are not consindered as "Inside"
         """
-        return ((self.bl[0] < posn[0] < self.ur[0]) and 
-                (self.bl[1] < posn[1] < self.ur[1]))
+        return all(self.bl < posn < self.ur)
 
 
 class Geometry:
