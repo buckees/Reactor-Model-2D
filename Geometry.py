@@ -84,10 +84,18 @@ class Rectangle(Shape):
 
 
 class Geometry:
-    def __init__(self, dim=1, iscyl=False):
+    """Constuct the geometry."""
+    
+    def __init__(self, dim=2, is_cyl=False):
+        """
+        Init the geometry.
+        
+        dim: dimless, int, must be in [1, 2, 3], 1:1D; 2:2D; 3:3D
+        is_cyl: bool, wether the geometry is cylidrical symmetric or not
+        """
         self.dim = dim
-        self.iscyl = iscyl
-        self.sequence = list()  # diff btw list() and []
+        self.is_cyl = is_cyl
+        self.sequence = list()
 
     def __str__(self):
         res = f'Geometry dimension {self.dim}D'
