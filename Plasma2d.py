@@ -58,7 +58,7 @@ class Plasma_2d(object):
         self.bndy_plasma()
         self.limit_plasma()
 
-    def bndy_plasma(self):
+    def set_bc(self):
         """Impose b.c. on the plasma."""
         for idx in self.geom.bndy_list:
             self.ne[idx] = 1e11
