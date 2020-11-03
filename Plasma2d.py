@@ -175,7 +175,7 @@ if __name__ == '__main__':
     # txp2d.plot_transp_coeff(pla2d)
     # calc source term
     src2d = React_2d(pla2d)
-    # #
+    #
     ne_ave, ni_ave = [], []
     time = []
     dt = 1e-8
@@ -196,5 +196,5 @@ if __name__ == '__main__':
     plt.plot(time, ni_ave, 'r-')
     plt.legend(['E', 'Ion'])
     plt.xlabel('Time (s)')
-    plt.xlabel('Ave. Density (m^-3)')
+    plt.ylabel('Ave. Density (m^-3)')
     fig.savefig('Density_vs_Time.png', dpi=300)
