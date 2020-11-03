@@ -11,10 +11,30 @@ Geometry module defines the construction of the geometry.
 import matplotlib.pyplot as plt
 import matplotlib.patches as patch
 
-class Shape:
+class Domain:
+    """Define the Domian."""
+    
+    def __init__(self, name='Demo'):
+        """
+        Init the Domain.
+        
+        name: str, var, name of domain.
+        """
+        self.name = name
+
+    def __str__(self):
+        """Print Domain info."""
+        return f'label = {self.name}'
+
+class Shape(Domain):
     """Init the Shape."""
     
     def __init__(self, label):
+        """
+        Init the Shape.
+        
+        label: str, var, label of shape.
+        """
         self.label = label
 
     def __str__(self):
