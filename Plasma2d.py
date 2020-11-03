@@ -176,8 +176,8 @@ if __name__ == '__main__':
     # calc source term
     src2d = React_2d(pla2d)
     # #
-    # ne_ave, ni_ave = [], []
-    # time = []
+    ne_ave, ni_ave = [], []
+    time = []
     dt = 1e-8
     niter = 3000
     for itn in range(niter):
@@ -185,10 +185,16 @@ if __name__ == '__main__':
         pla2d.den_evolve(dt, txp2d, src2d)
         pla2d.set_bc()
         pla2d.limit_plasma()
-        # ne_ave.append(np.mean(pla2d.ne))
-        # ni_ave.append(np.mean(pla2d.ni))
-        # time.append(dt*(niter+1))
+        ne_ave.append(pla2d.ne.mean())
+        ni_ave.append(pla2d.ni.mean())
+        time.append(dt*(itn+1))
         if not (itn+1) % (niter/10):
             # txp2d.plot_flux(pla2d)
-            pla2d.plot_plasma(fname=f'plamat_itn{itn+1}', figsize=figsize)
-            # pla2d.plot_plasma()
+            pla2d.plot_plasma(fname=f'plasma_itn{itn+1}', figsize=figsize)
+    fig = plt.figure(figsize=(4, 4), dpi=300)
+    plt.plot(time, ne_ave, 'b-')
+    plt.plot(time, ni_ave, 'r-')
+    plt.legend(['E', 'Ion'])
+    plt.xlabel('Time (s)')
+    plt.xlabel('Ave. Density (m^-3)')
+    fig.savefig('Density_vs_Time.png', dpi=300)
