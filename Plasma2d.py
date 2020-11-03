@@ -75,30 +75,27 @@ class Plasma_2d(object):
         self.Te = np.clip(self.Te, T_min, T_max)
         self.Ti = np.clip(self.Ti, T_min, T_max)
 
-    def plot(self):
+    def plot(self, figsize=(8, 8), dpi=600, fname='Plasma.png'):
         """
         Plot plasma variables vs. position x.
 
         density, flux, temperature
         """
-        x = self.geom.x
-        fig, axes = plt.subplots(1, 2, figsize=(8, 3),
+        _x, _z = self.geom.x, self.geom.z
+        fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
                                  constrained_layout=True)
         # plot densities
         ax = axes[0]
-        ax.plot(x, self.ne, 'b-')
-        ax.plot(x, self.ni, 'r-')
-        ax.legend(['E', 'Ion'])
+        ax.scatter(_x, _z, c=self.ne, s=1, cmap=colMap, vmin=0.2)
+        ax.set_title('E')
         ax.set_xlabel('Position (m)')
-        ax.set_ylabel('Density (m^-3)')
-        # plot temperature
+        ax.set_ylabel('Height (m)')
         ax = axes[1]
-        ax.plot(x, self.Te, 'b-')
-        ax.plot(x, self.Ti, 'r-')
-        ax.legend(['Te', 'Ti'])
+        ax.scatter(_x, _z, c=self.ni, s=1, cmap=colMap, vmin=0.2)
+        ax.set_title('Ion')
         ax.set_xlabel('Position (m)')
-        ax.set_ylabel('Temperature (eV)')
-        plt.show()
+        ax.set_ylabel('Height (m)')
+        fig.savefig(fname, dpi=dpi)
 
     def init_pot(self, phi=0.0):
         """Initiate potential attributes."""
@@ -138,33 +135,33 @@ class Plasma_2d(object):
 
 if __name__ == '__main__':
     """Test Plasma_1d."""
-    from Mesh import Mesh_1d
-    from Transp1d import Diff_1d, Ambi_1d
-    from React1d import React_1d
-    mesh1d = Mesh_1d('Plasma_1d', 10e-2, nx=51)
-    print(mesh1d)
-    pla1d = Plasma_1d(mesh1d)
-    pla1d.init_plasma()
-    pla1d.plot_plasma()
-    # calc the transport 
-    txp1d = Ambi_1d(pla1d)
-    txp1d.calc_transp_coeff(pla1d)
-    txp1d.plot_transp_coeff(pla1d)
-    # calc source term
-    src1d = React_1d(pla1d)
-    #
-    ne_ave, ni_ave = [], []
-    time = []
-    dt = 1e-6
-    niter = 3000
-    for itn in range(niter):
-        txp1d.calc_ambi(pla1d)
-        pla1d.den_evolve(dt, txp1d, src1d)
-        pla1d.bndy_plasma()
-        pla1d.limit_plasma()
-        ne_ave.append(np.mean(pla1d.ne))
-        ni_ave.append(np.mean(pla1d.ni))
-        time.append(dt*(niter+1))
-        if not (itn+1) % (niter/10):
-            txp1d.plot_flux(pla1d)
-            pla1d.plot_plasma()
+    from Mesh_temp import Mesh
+    mesh2d = Mesh(bl=(-1.0, 0.0), domain=(2.0, 4.0), ngrid=(21, 41))
+    mesh2d.find_bndy()
+    mesh2d.plot()
+    
+    # pla1d = Plasma_1d(mesh1d)
+    # pla1d.init_plasma()
+    # pla1d.plot_plasma()
+    # # calc the transport 
+    # txp1d = Ambi_1d(pla1d)
+    # txp1d.calc_transp_coeff(pla1d)
+    # txp1d.plot_transp_coeff(pla1d)
+    # # calc source term
+    # src1d = React_1d(pla1d)
+    # #
+    # ne_ave, ni_ave = [], []
+    # time = []
+    # dt = 1e-6
+    # niter = 3000
+    # for itn in range(niter):
+    #     txp1d.calc_ambi(pla1d)
+    #     pla1d.den_evolve(dt, txp1d, src1d)
+    #     pla1d.bndy_plasma()
+    #     pla1d.limit_plasma()
+    #     ne_ave.append(np.mean(pla1d.ne))
+    #     ni_ave.append(np.mean(pla1d.ni))
+    #     time.append(dt*(niter+1))
+    #     if not (itn+1) % (niter/10):
+    #         txp1d.plot_flux(pla1d)
+    #         pla1d.plot_plasma()
