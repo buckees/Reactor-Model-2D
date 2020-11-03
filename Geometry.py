@@ -190,7 +190,7 @@ class Geometry(Domain):
         posn_label = self.get_label(posn)
         return res or (posn_label == label)
     
-    def plot(self, figsize=(8, 8), dpi=300):
+    def plot(self, figsize=(8, 8), dpi=300, fname='Geometry'):
         """
         Plot the geometry.
         
@@ -200,24 +200,36 @@ class Geometry(Domain):
         fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
                          constrained_layout=True)
         ax = axes[0]
-        ax.set_xlim(self.bl[0], self.bl[0] + self.width)
-        ax.set_ylim(self.bl[1], self.bl[1] + self.height)
+        
         for shape in self.sequence:
             if shape.type == 'Rectangle':
                 ax.add_patch(
                     patch.Rectangle(shape.bl, shape.width, shape.height,
-                                    edgecolor='k'))
-        plt.show()
+                                    facecolor='k', edgecolor='b'))
+        ax = axes[1]
+        ax.add_patch(
+            patch.Rectangle(self.bl, self.width, self.height, 
+                            facecolor='b'))
+        for shape in self.sequence:
+            if shape.type == 'Rectangle':
+                ax.add_patch(
+                    patch.Rectangle(shape.bl, shape.width, shape.height,
+                                    facecolor='w', edgecolor='w'))
+        for ax in axes:
+            ax.set_xlim(self.bl[0], self.bl[0] + self.width)
+            ax.set_ylim(self.bl[1], self.bl[1] + self.height)
+        fig.savefig(fname, dpi=dpi)
                 
 if __name__ == '__main__':
-    icp2d = Geometry(name='2D ICP', width=1.0, height=2.0, 
+    icp2d = Geometry(name='2D ICP', bl=(-1.0, 0.0), width=2.0, height=4.0, 
                      dim=2, is_cyl=False)
-    # top = Rectangle(label='Metal', bottom_left=(0.0, 1.9), up_right=(1.0, 2.0))
-    top = Rectangle('Metal', (0.0, 1.9), (1.0, 2.0))
+    top = Rectangle('Metal', (-1.0, 3.5), (1.0, 4.0))
     icp2d.add_shape(top)
-    bott = Rectangle('Metal', (0.0, 0.0), (1.0, 0.1))
+    bott = Rectangle('Metal', (-0.8, 0.0), (0.8, 0.2))
     icp2d.add_shape(bott)
-    wall = Rectangle('Metal', (0.9, 0.0), (1.0, 2.0))
-    icp2d.add_shape(wall)
-    icp2d.plot()
+    left = Rectangle('Metal', (-1.0, 0.0), (-0.9, 4.0))
+    icp2d.add_shape(left)
+    right = Rectangle('Metal', (0.9, 0.0), (1.0, 4.0))
+    icp2d.add_shape(right)
+    icp2d.plot(fname='ICP2d.png')
     print(icp2d)
