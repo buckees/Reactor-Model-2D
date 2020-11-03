@@ -100,12 +100,12 @@ class Rectangle(Shape):
         """
         Init the Rectangle.
         
-        bottom_left: unit in m, (2, ) array
-        up_right: unit in m, (2, ) array
+        bottom_left: unit in m, (2, ) tuple
+        up_right: unit in m, (2, ) tuple
         """
         super().__init__(label)
-        self.bl = bottom_left
-        self.ur = up_right
+        self.bl = np.asarray(bottom_left)
+        self.ur = np.asarray(up_right)
         self.width = self.ur[0] - self.bl[0]
         self.height = self.ur[1] - self.bl[1]
         self.type = 'Rectangle'
