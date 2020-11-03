@@ -1,5 +1,5 @@
 """
-2D Plasma Module - Main Module
+2D Plasma Module - Main Module.
 
 Plasma_2d contains:
     density: update using explicit method, integrating by delt
@@ -139,6 +139,8 @@ class Plasma_2d(object):
 if __name__ == '__main__':
     """Test Plasma_1d."""
     from Mesh_temp import Mesh
+    from Transp2d import Diff_2d
+    from React2d import React_2d
     mesh2d = Mesh(bl=(-1.0, 0.0), domain=(2.0, 4.0), ngrid=(21, 41))
     mesh2d.find_bndy()
     mesh2d.plot()
@@ -146,25 +148,26 @@ if __name__ == '__main__':
     pla2d = Plasma_2d(mesh2d)
     pla2d.init_plasma()
     pla2d.plot_plasma()
-    # # calc the transport 
-    # txp1d = Ambi_1d(pla1d)
-    # txp1d.calc_transp_coeff(pla1d)
-    # txp1d.plot_transp_coeff(pla1d)
-    # # calc source term
-    # src1d = React_1d(pla1d)
+    
+    # calc the transport 
+    txp2d = Diff_2d(pla2d)
+    txp2d.calc_transp_coeff(pla2d)
+    # txp2d.plot_transp_coeff(pla2d)
+    # calc source term
+    src2d = React_2d(pla2d)
     # #
     # ne_ave, ni_ave = [], []
     # time = []
-    # dt = 1e-6
-    # niter = 3000
-    # for itn in range(niter):
-    #     txp1d.calc_ambi(pla1d)
-    #     pla1d.den_evolve(dt, txp1d, src1d)
-    #     pla1d.bndy_plasma()
-    #     pla1d.limit_plasma()
-    #     ne_ave.append(np.mean(pla1d.ne))
-    #     ni_ave.append(np.mean(pla1d.ni))
-    #     time.append(dt*(niter+1))
-    #     if not (itn+1) % (niter/10):
-    #         txp1d.plot_flux(pla1d)
-    #         pla1d.plot_plasma()
+    dt = 1e-9
+    niter = 3000
+    for itn in range(niter):
+        txp2d.calc_diff(pla2d)
+        pla2d.den_evolve(dt, txp2d, src2d)
+        pla2d.set_bc()
+        pla2d.limit_plasma()
+        # ne_ave.append(np.mean(pla2d.ne))
+        # ni_ave.append(np.mean(pla2d.ni))
+        # time.append(dt*(niter+1))
+        if not (itn+1) % (niter/10):
+            # txp2d.plot_flux(pla2d)
+            pla2d.plot_plasma()
