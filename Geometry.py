@@ -11,30 +11,7 @@ Geometry module defines the construction of the geometry.
 import matplotlib.pyplot as plt
 import matplotlib.patches as patch
 
-class Domain:
-    """Define the Domian."""
-    
-    def __init__(self, name='Demo', width=1.0, height=1.0):
-        """
-        Init the Domain.
-        
-        name: str, var, name of domain.
-        width: unit in m, var, width of domain
-        height: unit in m, var, height of domain
-        """
-        self.name = name
-        self.width = width
-        self.height = height
-
-    def __str__(self):
-        """Print Domain info."""
-        res = 'Domain:'
-        res += f'\nname = {self.name}'
-        res += f'\nwidth = {self.width} m'
-        res += f'\nheight = {self.height} m'
-        return res
-
-class Shape(Domain):
+class Shape():
     """Init the Shape."""
     
     def __init__(self, label):
@@ -49,11 +26,36 @@ class Shape(Domain):
         """Print Shape info."""
         return f'label = {self.label}'
 
+class Domain(Shape):
+    """Define the Domian."""
+    
+    def __init__(self, name='Demo', width=1.0, height=1.0):
+        """
+        Init the Domain.
+        
+        name: str, var, name of domain.
+        width: unit in m, var, width of domain
+        height: unit in m, var, height of domain
+        """
+        self.name = name
+        self.width = width
+        self.height = height
+        Shape.__init__(self, label='Plasma')
+
+    def __str__(self):
+        """Print Domain info."""
+        res = 'Domain:'
+        res += f'\nname = {self.name}'
+        res += f'\nlabel = {self.label}'
+        res += f'\nwidth = {self.width} m'
+        res += f'\nheight = {self.height} m'
+        return res
+
 
 class Interval(Shape):
     """Interval is a 1D basic shape."""
     
-    def __init__(self, begin, end, axis=0):
+    def __init__(self, label, begin, end, axis=0):
         """
         Init the Interval.
         
@@ -61,6 +63,7 @@ class Interval(Shape):
         end: unit in m, var
         axis: ???
         """
+        Shape.__init__(self, label)
         self.begin = begin
         self.end = end
         self.axis = axis
@@ -120,16 +123,18 @@ class Rectangle(Shape):
         return all(self.bl < posn < self.ur)
 
 
-class Geometry:
+class Geometry(Domain):
     """Constuct the geometry."""
     
-    def __init__(self, dim=2, is_cyl=False):
+    def __init__(self, name='Geometry', width=1.0, height=1.0, 
+                 dim=2, is_cyl=False):
         """
         Init the geometry.
         
         dim: dimless, int, must be in [1, 2, 3], 1:1D; 2:2D; 3:3D
         is_cyl: bool, wether the geometry is cylidrical symmetric or not
         """
+        Domain.__init__(self, name, width, height)
         self.dim = dim
         self.is_cyl = is_cyl
         self.sequence = list()
@@ -190,6 +195,8 @@ class Geometry:
         fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
                          constrained_layout=True)
         ax = axes[0]
+        ax.set_xlim(0.0, self.width)
+        ax.set_ylim(0.0, self.height)
         for shape in self.sequence:
             if shape.type == 'Rectangle':
                 ax.add_patch(
@@ -199,13 +206,14 @@ class Geometry:
                 
 if __name__ == '__main__':
     import numpy as np
-    icp2d = Geometry(dim=2, is_cyl=False)
+    icp2d = Geometry(name='2D ICP', width=1.0, height=2.0, 
+                     dim=2, is_cyl=False)
     plasma = Rectangle(np.array([0.0, 0.0]), np.array([1.0, 2.0]))
     icp2d.add_shape(plasma)
     top = Rectangle(np.array([0.0, 1.9]), np.array([1.0, 2.0]))
     icp2d.add_shape(top)
     bott = Rectangle(np.array([0.0, 0.0]), np.array([1.0, 0.1]))
     icp2d.add_shape(bott)
-    wall = Rectangle(np.array([0.9, 0.0]), np.array([0.0, 2.0]))
+    wall = Rectangle(np.array([0.9, 0.0]), np.array([1.0, 2.0]))
     icp2d.add_shape(wall)
     icp2d.plot()
