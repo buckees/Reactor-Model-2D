@@ -24,9 +24,21 @@ class Mesh():
         self.x, self.z = np.meshgrid(tempx, tempz)
         self.mat = np.ones_like(self.x)
 
-    def add_bndy(self):
+    def find_bndy(self):
         """Add boundaries."""
-        pass
+        self.bndy = np.zeros_like(self.x)
+        self.bndy_list = list()
+        for i in range(self.nx-1):
+            self.bndy_list.append((0, i))
+        for j in range(self.nz-1):
+            self.bndy_list.append((j, self.nx-1))
+        for i in reversed(range(1, self.nx)):
+            self.bndy_list.append((self.nz-1, i))
+        for j in reversed(range(1, self.nz)):
+            self.bndy_list.append((j, 0))
+        # sign value at bndy as 1
+        for idx in self.bndy_list:
+            self.bndy[idx] = 1
 
     def add_mat(self):
         """Add materials."""
@@ -38,6 +50,8 @@ class Mesh():
                                  constrained_layout=True)
         ax = axes[0]
         ax.scatter(self.x, self.z, c=self.mat, s=1, cmap=colMap, vmin=0.2)
+        ax = axes[1]
+        ax.scatter(self.x, self.z, c=self.bndy, s=1, cmap=colMap, vmin=0.2)
         fig.savefig(fname, dpi=dpi)
 
     def cnt_diff(self, y):
@@ -79,5 +93,6 @@ class Mesh():
 if __name__ == '__main__':
     """Test Mesh."""
     icp2d = Mesh(bl=(-1.0, 0.0), domain=(2.0, 4.0), ngrid=(21, 41))
+    icp2d.find_bndy()
     icp2d.plot()
 
