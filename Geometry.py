@@ -10,6 +10,7 @@ Geometry module defines the construction of the geometry.
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as patch
+import numpy as np
 
 class Shape():
     """Init the Shape."""
@@ -199,8 +200,8 @@ class Geometry(Domain):
         fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
                          constrained_layout=True)
         ax = axes[0]
-        ax.set_xlim(super().bl[0], super().bl[0] + self.width)
-        ax.set_ylim(super().bl[1], super().bl[1] + self.height)
+        ax.set_xlim(self.bl[0], self.bl[0] + self.width)
+        ax.set_ylim(self.bl[1], self.bl[1] + self.height)
         for shape in self.sequence:
             if shape.type == 'Rectangle':
                 ax.add_patch(
@@ -209,14 +210,14 @@ class Geometry(Domain):
         plt.show()
                 
 if __name__ == '__main__':
-    import numpy as np
     icp2d = Geometry(name='2D ICP', width=1.0, height=2.0, 
                      dim=2, is_cyl=False)
-    top = Rectangle(np.array([0.0, 1.9]), np.array([1.0, 2.0]))
+    # top = Rectangle(label='Metal', bottom_left=(0.0, 1.9), up_right=(1.0, 2.0))
+    top = Rectangle('Metal', (0.0, 1.9), (1.0, 2.0))
     icp2d.add_shape(top)
-    bott = Rectangle(np.array([0.0, 0.0]), np.array([1.0, 0.1]))
+    bott = Rectangle('Metal', (0.0, 0.0), (1.0, 0.1))
     icp2d.add_shape(bott)
-    wall = Rectangle(np.array([0.9, 0.0]), np.array([1.0, 2.0]))
+    wall = Rectangle('Metal', (0.9, 0.0), (1.0, 2.0))
     icp2d.add_shape(wall)
     icp2d.plot()
     print(icp2d)
