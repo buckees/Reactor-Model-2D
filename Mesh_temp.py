@@ -3,8 +3,11 @@ Temporary Mesh
 """
 
 import numpy as np
+from copy import copy, deepcopy
 import matplotlib.pyplot as plt
-from copy import deepcopy
+import matplotlib.cm as cm
+colMap = copy(cm.get_cmap("Accent"))
+colMap.set_under(color='white')
 
 class Mesh():
     """Define 2d Mesh."""
@@ -19,6 +22,7 @@ class Mesh():
         tempx = np.linspace(0.0, self.width, self.nx)
         tempz = np.linspace(0.0, self.height, self.nz)
         self.x, self.z = np.meshgrid(tempx, tempz)
+        self.mat = np.ones_like(self.x)
 
     def add_bndy(self):
         """Add boundaries."""
@@ -29,14 +33,11 @@ class Mesh():
         pass
 
     def plot(self, figsize=(8, 8), dpi=600, fname='Mesh.png'):
-        """Plot mesh and surface."""
-
+        """Plot mesh."""
         fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
                                  constrained_layout=True)
         ax = axes[0]
         ax.scatter(self.x, self.z, c=self.mat, s=1, cmap=colMap, vmin=0.2)
-        ax = axes[1]
-        ax.scatter(self.x, self.z, c=self.surf, s=1)
         fig.savefig(fname, dpi=dpi)
 
     def cnt_diff(self, y):
@@ -75,4 +76,8 @@ class Mesh():
         d2y[0], d2y[-1] = deepcopy(d2y[1]), deepcopy(d2y[-2])
         return d2y
 
+if __name__ == '__main__':
+    """Test Mesh."""
+    icp2d = Mesh(bl=(-1.0, 0.0), domain=(2.0, 4.0), ngrid=(21, 41))
+    icp2d.plot()
 
