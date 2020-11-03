@@ -15,8 +15,12 @@ Transp_2d contains:
 from Constants import KB_EV, EON_MASS, UNIT_CHARGE
 
 import numpy as np
+from copy import copy, deepcopy
 import matplotlib.pyplot as plt
-from copy import deepcopy
+import matplotlib.cm as cm
+colMap = copy(cm.get_cmap("Accent"))
+colMap.set_under(color='white')
+
 
 
 class Transp_2d(object):
@@ -71,30 +75,31 @@ class Transp_2d(object):
         fig.savefig(fname, dpi=dpi)
 
     
-    def plot_flux(self, pla):
+    def plot_flux(self, pla,
+                  figsize=(8, 8), dpi=600, fname='Flux.png'):
         """
         Plot flux and dflux.
         
         pla: Plasma_1d object
             use pla.geom.x for plot
         """
-        x = pla.geom.x
-        fig, axes = plt.subplots(1, 2, figsize=(8, 4),
+        _x, _z = self.geom.x, self.geom.z
+        fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
                                  constrained_layout=True)
-        # plot potential
+        # plot densities
         ax = axes[0]
-        ax.plot(x, self.fluxe, 'bo-')
-        ax.plot(x, self.fluxi, 'ro-')
-        ax.legend(['e flux', 'Ion flux'])
-        # plot E-field
+        ax.scatter(_x, _z, c=self.fluxe, s=1, cmap=colMap, vmin=0.2)
+        ax.set_title('E Flux')
+        ax.set_xlabel('Position (m)')
+        ax.set_ylabel('Height (m)')
         ax = axes[1]
-        ax.plot(x, self.dfluxe, 'bo-')
-        ax.plot(x, self.dfluxi, 'ro-')
-        ax.legend(['e dflux', 'Ion dflux'])
-        # show fig
-        plt.show(fig)
+        ax.scatter(_x, _z, c=self.fluxi, s=1, cmap=colMap, vmin=0.2)
+        ax.set_title('Ion Flux')
+        ax.set_xlabel('Position (m)')
+        ax.set_ylabel('Height (m)')
+        fig.savefig(fname, dpi=dpi)
 
-class Diff_1d(Transp_1d):
+class Diff_2d(Transp_2d):
     """
     Calc the dflux for Diffusion Only Module.
     
