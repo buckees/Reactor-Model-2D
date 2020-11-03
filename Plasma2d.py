@@ -90,12 +90,12 @@ class Plasma_2d(object):
         # plot densities
         ax = axes[0]
         ax.scatter(_x, _z, c=self.ne, s=1, cmap=colMap, vmin=0.2)
-        ax.set_title('E')
+        ax.set_title('E Density')
         ax.set_xlabel('Position (m)')
         ax.set_ylabel('Height (m)')
         ax = axes[1]
         ax.scatter(_x, _z, c=self.ni, s=1, cmap=colMap, vmin=0.2)
-        ax.set_title('Ion')
+        ax.set_title('Ion Density')
         ax.set_xlabel('Position (m)')
         ax.set_ylabel('Height (m)')
         fig.savefig(fname, dpi=dpi)
