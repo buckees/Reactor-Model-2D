@@ -9,22 +9,16 @@ from copy import deepcopy
 class Mesh():
     """Define 2d Mesh."""
 
-    def __init__(self, width, height, nx=11, nz=11):
-        
-        
-        self.nx = nx
-        self.nz = nz
-        self.delx = self.width/(self.nx-1)
-        self.delz = self.height/(self.nz-1)
-        self.x = np.linspace(0.0, self.width, self.nx)
-
-    def __str__(self):
-        """Print 1d mesh information."""
-        res = 'Mesh_1d:'
-        res += '\n ' + super().__str__()
-        res += f'\nnx = {self.nx}'
-        res += f'\ndelx = {self.delx} m'
-        return res
+    def __init__(self, bl=(0.0, 0.0), domain=(1.0, 1.0), ngrid=(11, 11)):
+        self.domain = np.asarray(domain)
+        self.ngrid = np.asarray(ngrid)
+        self.res = np.divide(self.domain, self.ngrid - 1)
+        self.width, self.height = self.domain
+        self.nx, self.nz = self.ngrid
+        self.delx, self.delz = self.res
+        tempx = np.linspace(0.0, self.width, self.nx)
+        tempz = np.linspace(0.0, self.height, self.nz)
+        self.x, self.z = np.meshgrid(tempx, tempz)
 
     def add_bndy(self):
         """Add boundaries."""
@@ -34,13 +28,16 @@ class Mesh():
         """Add materials."""
         pass
 
-    def plot_mesh(self):
-        """Plot 1d mesh in X."""
-        fig, ax = plt.subplots(1, 1, figsize=(4, 4),
-                               constrained_layout=True)
-        y = np.zeros_like(self.x)
-        ax.plot(self.x, y, 'o')
-        plt.show(fig)
+    def plot(self, figsize=(8, 8), dpi=600, fname='Mesh.png'):
+        """Plot mesh and surface."""
+
+        fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
+                                 constrained_layout=True)
+        ax = axes[0]
+        ax.scatter(self.x, self.z, c=self.mat, s=1, cmap=colMap, vmin=0.2)
+        ax = axes[1]
+        ax.scatter(self.x, self.z, c=self.surf, s=1)
+        fig.savefig(fname, dpi=dpi)
 
     def cnt_diff(self, y):
         """
