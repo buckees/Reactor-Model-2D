@@ -78,8 +78,8 @@ class Plasma_2d(object):
         self.Te = np.clip(self.Te, T_min, T_max)
         self.Ti = np.clip(self.Ti, T_min, T_max)
 
-    def plot_plasma(self, figsize=(8, 8), dpi=600, fname='Plasma.png',
-                    imode='Contour'):
+    def plot_plasma(self, figsize=(8, 8), ihoriz=1, 
+                    dpi=600, fname='Plasma.png', imode='Contour'):
         """
         Plot plasma variables vs. position x.
 
@@ -87,8 +87,12 @@ class Plasma_2d(object):
         imode: str, var, ['Contour', 'Scatter']
         """
         _x, _z = self.geom.x, self.geom.z
-        fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
-                                 constrained_layout=True)
+        if ihoriz:
+            fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
+        else:
+            fig, axes = plt.subplots(2, 1, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
         
         levels = np.linspace(1e11, 1e17, 11)
         
@@ -156,21 +160,27 @@ class Plasma_2d(object):
 if __name__ == '__main__':
     """Test Plasma_1d."""
     from Mesh_temp import Mesh
-    from Transp2d import Diff_2d
+    from Transp2d import Diff_2d, Ambi_2d
     from React2d import React_2d
-    domain=(2.0, 4.0)
-    mesh2d = Mesh(bl=(-1.0, 0.0), domain=domain, ngrid=(21, 41))
+    domain=(8.0, 2.0)
+    mesh2d = Mesh(bl=(-1.0, 0.0), domain=domain, ngrid=(81, 21))
     mesh2d.find_bndy()
     mesh2d.plot()
     
     pla2d = Plasma_2d(mesh2d)
     pla2d.init_plasma()
     pla2d.set_bc()
-    figsize = tuple([domain[0]*2, domain[1]])
-    pla2d.plot_plasma(figsize=figsize)
+    if domain[0] > domain[1]:
+        figsize = tuple([domain[0], domain[1]*2])
+        ihoriz = 0
+    else:
+        figsize = tuple([domain[0]*2, domain[1]])
+        ihoriz = 1
+    pla2d.plot_plasma(figsize=figsize, ihoriz=ihoriz)
     
     # calc the transport 
-    txp2d = Diff_2d(pla2d)
+    # txp2d = Diff_2d(pla2d)
+    txp2d = Ambi_2d(pla2d)
     txp2d.calc_transp_coeff(pla2d)
     # txp2d.plot_transp_coeff(pla2d)
     # calc source term
@@ -178,10 +188,10 @@ if __name__ == '__main__':
     #
     ne_ave, ni_ave = [], []
     time = []
-    dt = 1e-8
+    dt = 1e-3
     niter = 3000
     for itn in range(niter):
-        txp2d.calc_diff(pla2d)
+        txp2d.calc_ambi(pla2d)
         pla2d.den_evolve(dt, txp2d, src2d)
         pla2d.set_bc()
         pla2d.limit_plasma()
@@ -190,7 +200,8 @@ if __name__ == '__main__':
         time.append(dt*(itn+1))
         if not (itn+1) % (niter/10):
             # txp2d.plot_flux(pla2d)
-            pla2d.plot_plasma(fname=f'plasma_itn{itn+1}', figsize=figsize)
+            pla2d.plot_plasma(fname=f'plasma_itn{itn+1}', 
+                              figsize=figsize, ihoriz=ihoriz)
     fig = plt.figure(figsize=(4, 4), dpi=300)
     plt.plot(time, ne_ave, 'b-')
     plt.plot(time, ni_ave, 'r-')
