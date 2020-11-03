@@ -75,7 +75,7 @@ class Plasma_2d(object):
         self.Te = np.clip(self.Te, T_min, T_max)
         self.Ti = np.clip(self.Ti, T_min, T_max)
 
-    def plot(self, figsize=(8, 8), dpi=600, fname='Plasma.png'):
+    def plot_plasma(self, figsize=(8, 8), dpi=600, fname='Plasma.png'):
         """
         Plot plasma variables vs. position x.
 
@@ -140,7 +140,7 @@ if __name__ == '__main__':
     mesh2d.find_bndy()
     mesh2d.plot()
     
-    # pla1d = Plasma_1d(mesh1d)
+    pla2d = Plasma_2d(mesh1d)
     # pla1d.init_plasma()
     # pla1d.plot_plasma()
     # # calc the transport 
