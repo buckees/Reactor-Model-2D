@@ -14,17 +14,25 @@ import matplotlib.patches as patch
 class Domain:
     """Define the Domian."""
     
-    def __init__(self, name='Demo'):
+    def __init__(self, name='Demo', width=1.0, height=1.0):
         """
         Init the Domain.
         
         name: str, var, name of domain.
+        width: unit in m, var, width of domain
+        height: unit in m, var, height of domain
         """
         self.name = name
+        self.width = width
+        self.height = height
 
     def __str__(self):
         """Print Domain info."""
-        return f'label = {self.name}'
+        res = 'Domain:'
+        res += f'\nname = {self.name}'
+        res += f'\nwidth = {self.width} m'
+        res += f'\nheight = {self.height} m'
+        return res
 
 class Shape(Domain):
     """Init the Shape."""
