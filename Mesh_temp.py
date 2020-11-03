@@ -54,7 +54,7 @@ class Mesh():
         ax.scatter(self.x, self.z, c=self.bndy, s=1, cmap=colMap, vmin=0.2)
         fig.savefig(fname, dpi=dpi)
 
-    def cnt_diff(self, y):
+    def cnt_diff(self, f):
         """
         Caculate dy/dx using central differencing.
         
@@ -63,16 +63,20 @@ class Mesh():
         dy[0] = dy[1]; dy[-1] = dy[-2]
         output: dy
         """
-        dy = np.zeros_like(self.x)
+        dfx = np.zeros_like(self.x)
+        dfz = np.zeros_like(self.z)
         # Although dy[0] and dy[-1] are signed here,
         # they are eventually specified in boundary conditions
         # dy[0] = dy[1]; dy[-1] = dy[-2]
         for i in range(1, self.nx-1):
-            dy[i] = (y[i+1] - y[i-1])/self.delx/2.0
-        dy[0], dy[-1] = deepcopy(dy[1]), deepcopy(dy[-2])
-        return dy
+            dfx[:, i] = (f[:, i+1] - f[:, i-1])/self.delx/2.0
+        for j in range(1, self.nz-1):
+            dfx[j, :] = (f[j+1, :] - f[j-1, :])/self.delz/2.0
+        dfx[:, 0], dfx[:, -1] = deepcopy(dfx[:, 1]), deepcopy(dfx[:, -2])
+        dfz[0, :], dfz[-1, :] = deepcopy(dfz[1, :]), deepcopy(dfz[-2, :])
+        return dfx, dfz
     
-    def cnt_diff_2nd(self, y):
+    def cnt_diff_2nd(self, f):
         """
         Caculate d2y/dx2 using 2nd order central differencing.
 
@@ -81,14 +85,19 @@ class Mesh():
         d2y[0] = d2y[1]; d2y[-1] = d2y[-2]
         output: d2y/dx2
         """
-        d2y = np.zeros_like(self.x)
+        d2fx = np.zeros_like(self.x)
+        d2fz = np.zeros_like(self.z)
         # Although dy[0] and dy[-1] are signed here,
         # they are eventually specified in boundary conditions
         # d2y[0] = d2y[1]; d2y[-1] = d2y[-2]
         for i in range(1, self.nx-1):
-            d2y[i] = (y[i+1] - 2 * y[i] + y[i-1])/self.delx**2
-        d2y[0], d2y[-1] = deepcopy(d2y[1]), deepcopy(d2y[-2])
-        return d2y
+            d2fx[:, i] = (f[:, i+1] - 2 * f[:, i] + f[:, i-1])/self.delx**2
+        for j in range(1, self.nz-1):
+            d2fx[j, :] = (f[j+1, :] - 2 * f[j, :] + f[j-1, :])/self.delz**2
+        d2fx[:, 0], d2fx[:, -1] = deepcopy(d2fx[:, 1]), deepcopy(d2fx[:, -2])
+        d2fz[0, :], d2fz[-1, :] = deepcopy(d2fz[1, :]), deepcopy(d2fz[-2, :])
+        d2f = d2fx + d2fz
+        return d2f
 
 if __name__ == '__main__':
     """Test Mesh."""
