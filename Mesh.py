@@ -4,7 +4,7 @@ Define Mesh.
 Mesh --> 1d or 2d.
 """
 
-from Geometry import Geometry
+from Geometry import Geometry, Rectangle
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,7 +17,9 @@ class Mesh(Geometry):
         """Add option to choose nx or res for mesh."""
         super().__init__(label, width, height)
         self.nx = nx
+        self.nz = nz
         self.delx = self.width/(self.nx-1)
+        self.delz = self.height/(self.nz-1)
         self.x = np.linspace(0.0, self.width, self.nx)
 
     def __str__(self):
@@ -83,9 +85,17 @@ class Mesh(Geometry):
 
 if __name__ == '__main__':
     """Test Mesh."""
-    geom1d = Geom_1d('A', 10e-2)
-    mesh1d = Mesh_1d(geom1d.label, geom1d.width,
-                     nx=101)
-    # print(geom1d)
-    print(mesh1d)
-    mesh1d.plot_mesh()
+    icp2d = Geometry(name='2D ICP', bl=(-0.5, 0.0), width=1.0, height=2.0, 
+                     dim=2, is_cyl=False)
+    # top = Rectangle(label='Metal', bottom_left=(0.0, 1.9), up_right=(1.0, 2.0))
+    top = Rectangle('Metal', (-0.5, 1.9), (0.5, 2.0))
+    icp2d.add_shape(top)
+    bott = Rectangle('Metal', (-0.5, 0.0), (0.5, 0.1))
+    icp2d.add_shape(bott)
+    left = Rectangle('Metal', (-0.5, 0.0), (-0.4, 2.0))
+    icp2d.add_shape(left)
+    right = Rectangle('Metal', (0.4, 0.0), (0.5, 2.0))
+    icp2d.add_shape(right)
+    icp2d.plot()
+    print(icp2d)
+    
