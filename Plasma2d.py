@@ -9,8 +9,11 @@ Plasma_2d contains:
 from Constants import AMU
 
 import numpy as np
+from copy import copy, deepcopy
 import matplotlib.pyplot as plt
-from copy import deepcopy
+import matplotlib.cm as cm
+colMap = copy(cm.get_cmap("Accent"))
+colMap.set_under(color='white')
 
 
 class Plasma_2d(object):
@@ -45,17 +48,17 @@ class Plasma_2d(object):
                             1e9 at 1000 mTorr
         Mi: kg, ion mass
         """
-        x = self.geom.x
-        self.ne = np.ones(x)*ne  # init uniform ne on 1d mesh
-        self.ni = np.ones(x)*ne  # init ni to neutralize ne
-        self.nn = np.ones(x)*(press*3.3e19)  # init neutral density
+        _x = self.geom.x
+        self.ne = np.ones_like(_x)*ne  # init uniform ne on 1d mesh
+        self.ni = np.ones_like(_x)*ne  # init ni to neutralize ne
+        self.nn = np.ones_like(_x)*(press*3.3e19)  # init neutral density
         self.press = press
-        self.Te = np.ones(x)*Te  # init eon temperature
-        self.Ti = np.ones(x)*Ti  # init ion temperature
-        self.coll_em = np.ones(x)*(press/10.0*1e7)  # eon coll freq (mom)
-        self.coll_im = np.ones(x)*(press/10.0*1e7)  # ion coll freq (mom)
+        self.Te = np.ones_like(_x)*Te  # init eon temperature
+        self.Ti = np.ones_like(_x)*Ti  # init ion temperature
+        self.coll_em = np.ones_like(_x)*(press/10.0*1e7)  # eon coll freq (mom)
+        self.coll_im = np.ones_like(_x)*(press/10.0*1e7)  # ion coll freq (mom)
         self.Mi = Mi*AMU # ion mass 
-        self.bndy_plasma()
+        self.set_bc()
         self.limit_plasma()
 
     def set_bc(self):
@@ -140,9 +143,9 @@ if __name__ == '__main__':
     mesh2d.find_bndy()
     mesh2d.plot()
     
-    pla2d = Plasma_2d(mesh1d)
-    # pla1d.init_plasma()
-    # pla1d.plot_plasma()
+    pla2d = Plasma_2d(mesh2d)
+    pla2d.init_plasma()
+    pla2d.plot_plasma()
     # # calc the transport 
     # txp1d = Ambi_1d(pla1d)
     # txp1d.calc_transp_coeff(pla1d)
