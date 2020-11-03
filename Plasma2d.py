@@ -60,13 +60,12 @@ class Plasma_2d(object):
 
     def bndy_plasma(self):
         """Impose b.c. on the plasma."""
-        self.ne[0], self.ne[-1] = 1e11, 1e11
-        self.ni[0], self.ni[-1] = 1e11, 1e11
-        self.nn[0], self.nn[-1] = 1e11, 1e11
-        self.Te[0], self.Te[-1] = 0.1, 0.1
-        self.Ti[0], self.Ti[-1] = 0.01, 0.01
-        # self.coll_em[0], self.coll_em[-1] = 1e5, 1e5
-        # self.coll_im[0], self.coll_im[-1] = 1e5, 1e5
+        for idx in self.geom.bndy_list:
+            self.ne[idx] = 1e11
+            self.ni[idx] = 1e11
+            self.nn[idx] = 1e11
+            self.Te[idx] = 0.1
+            self.Ti[idx] = 0.01
 
     def limit_plasma(self, n_min=1e11, n_max=1e22, T_min=0.001, T_max=100.0):
         """Limit variables in the plasma."""
@@ -76,7 +75,7 @@ class Plasma_2d(object):
         self.Te = np.clip(self.Te, T_min, T_max)
         self.Ti = np.clip(self.Ti, T_min, T_max)
 
-    def plot_plasma(self):
+    def plot(self):
         """
         Plot plasma variables vs. position x.
 
