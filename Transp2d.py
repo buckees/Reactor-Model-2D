@@ -121,7 +121,7 @@ class Diff_2d(Transp_2d):
         self.dfluxi = -self.Di * pla.geom.cnt_diff_2nd(pla.ni)
 
     
-class Ambi_1d(Transp_2d):
+class Ambi_2d(Transp_2d):
     """
     Calc the dflux for Ambipolar Diffusion Module.
 
@@ -154,12 +154,14 @@ class Ambi_1d(Transp_2d):
         self.calc_transp_coeff(pla)
         # Calc ambi coeff
         self.Da = self.Di*(1.0 + np.divide(pla.Te, pla.Ti))
-        dni = pla.geom.cnt_diff(pla.ni)
-        self.Ea = np.divide(self.Di - self.De, self.Mui + self.Mue)
-        self.Ea *= np.divide(dni, pla.ni)
-        # Calc flux
-        self.fluxe = -self.Da * pla.geom.cnt_diff(pla.ne)
-        self.fluxi = -self.Da * pla.geom.cnt_diff(pla.ni)
+        # _dnix, _dniz = pla.geom.cnt_diff(pla.ni)
+        # self.Eax = np.divide(self.Di - self.De, self.Mui + self.Mue)
+        # self.Eaz = deepcopy(self.Eax)
+        # self.Eax *= np.divide(dnix, pla.nix)
+        # self.Eaz *= np.divide(dniz, pla.niz)
+        # # Calc flux
+        # self.fluxex, self.fluxez = -self.Da * pla.geom.cnt_diff(pla.ne)
+        # self.fluxix, self.fluxiz = -self.Da * pla.geom.cnt_diff(pla.ni)
         # Calc dflux
         self.dfluxe = -self.Da * pla.geom.cnt_diff_2nd(pla.ne)
         self.dfluxi = -self.Da * pla.geom.cnt_diff_2nd(pla.ni)
