@@ -58,7 +58,7 @@ class Transp_2d(object):
         pla: Plasma_1d object
             use pla.geom.x for plot
         """
-        _x, _z = self.geom.x, self.geom.z
+        _x, _z = pla.geom.x, pla.geom.z
         fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
                                  constrained_layout=True)
         # plot densities
@@ -83,7 +83,7 @@ class Transp_2d(object):
         pla: Plasma_1d object
             use pla.geom.x for plot
         """
-        _x, _z = self.geom.x, self.geom.z
+        _x, _z = pla.geom.x, pla.geom.z
         fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
                                  constrained_layout=True)
         # plot densities
@@ -99,6 +99,7 @@ class Transp_2d(object):
         ax.set_ylabel('Height (m)')
         fig.savefig(fname, dpi=dpi)
 
+
 class Diff_2d(Transp_2d):
     """
     Calc the dflux for Diffusion Only Module.
@@ -107,8 +108,9 @@ class Diff_2d(Transp_2d):
     D: m^2/s, diffusion coefficient is calc from Tranps_1d
     Output: D * d2n/dx2
     """
+    
     def calc_diff(self, pla):
-        """Calc diffusion term: D * d2n/dx2 and diffusion flux D * dn/dx. """
+        """Calc diffusion term: D * d2n/dx2 and diffusion flux D * dn/dx."""
         # Calc transp coeff first
         self.calc_transp_coeff(pla)
         # Calc flux
@@ -117,8 +119,9 @@ class Diff_2d(Transp_2d):
         # Calc dflux
         self.dfluxe = -self.De * pla.geom.cnt_diff_2nd(pla.ne)
         self.dfluxi = -self.Di * pla.geom.cnt_diff_2nd(pla.ni)
+
     
-class Ambi_1d(Transp_1d):
+class Ambi_1d(Transp_2d):
     """
     Calc the dflux for Ambipolar Diffusion Module.
 
@@ -165,16 +168,32 @@ class Ambi_1d(Transp_1d):
 
 if __name__ == '__main__':
     """Test the tranp coeff calc."""
-    from Mesh import Mesh_1d
-    from Plasma1d import Plasma_1d
-    mesh1d = Mesh_1d('Plasma_1d', 10e-2, nx=11)
-    print(mesh1d)
-    plasma1d = Plasma_1d(mesh1d)
-    plasma1d.init_plasma()
-    # Plasma1d.plot_plasma()
-    txp1d = Diff_1d(plasma1d)
-    txp1d.calc_transp_coeff(plasma1d)
-    txp1d.plot_transp_coeff(plasma1d)
-    txp1d.calc_diff(plasma1d)
-    txp1d.plot_flux(plasma1d)
+    from Mesh_temp import Mesh
+    from Plasma2d import Plasma_2d
+    mesh2d = Mesh(bl=(-1.0, 0.0), domain=(2.0, 4.0), ngrid=(21, 41))
+    mesh2d.find_bndy()
+    mesh2d.plot()
+    
+    pla2d = Plasma_2d(mesh2d)
+    pla2d.init_plasma()
+    pla2d.plot_plasma()
+
+    txp2d = Diff_2d(pla2d)
+    txp2d.calc_transp_coeff(pla2d)
+    # txp2d.plot_transp_coeff(pla2d)
+    txp2d.calc_diff(pla2d)
+    # txp2d.plot_flux(pla2d)
+    
+    # from Mesh import Mesh_1d
+    # from Plasma1d import Plasma_1d
+    # mesh1d = Mesh_1d('Plasma_1d', 10e-2, nx=11)
+    # print(mesh1d)
+    # plasma1d = Plasma_1d(mesh1d)
+    # plasma1d.init_plasma()
+    # # Plasma1d.plot_plasma()
+    # txp1d = Diff_1d(plasma1d)
+    # txp1d.calc_transp_coeff(plasma1d)
+    # txp1d.plot_transp_coeff(plasma1d)
+    # txp1d.calc_diff(plasma1d)
+    # txp1d.plot_flux(plasma1d)
     
