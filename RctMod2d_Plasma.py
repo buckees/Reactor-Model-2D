@@ -131,6 +131,48 @@ class Plasma2d(object):
             ax.set_aspect('equal')
         fig.savefig(fname, dpi=dpi)
 
+    def plot_Te(self, figsize=(8, 8), ihoriz=1, 
+                    dpi=300, fname='Plasma.png', imode='Contour'):
+        """
+        Plot plasma variables vs. position.
+            
+        var include density, temperature.
+        figsize: a.u., (2, ) tuple, size of fig
+        ihoriz: a.u., var, 0 or 1, set the layout of fig horizontal or not
+        dpi: a.u., dots per inch
+        fname: str, var, name of png file to save
+        imode: str, var, ['Contour', 'Scatter']
+        """
+        _x, _z = self.mesh.x, self.mesh.z
+        if ihoriz:
+            fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
+        else:
+            fig, axes = plt.subplots(2, 1, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
+        
+        _levels = np.linspace(1e11, 1e17, 11)
+        # plot densities
+        if imode == 'Contour':
+            for _ax, _den, _title in zip(axes, (self.Te, self.Ti), 
+                                ('E Temperature', 'Ion Temperature')):
+                _cs = _ax.contourf(_x, _z, _den, cmap=colMap, 
+                                   levels=_levels, vmin=1.1e11)
+                _ax.set_title(_title)
+                fig.colorbar(_cs, ax=_ax, shrink=0.9)
+            
+        elif imode == 'Scatter':
+            for _ax, _den, _title in zip(axes, (self.Te, self.Ti), 
+                                ('E Temperature', 'Ion Temperature')):
+                _ax.scatter(_x, _z, c=_den, s=5, cmap=colMap, vmin=1.1e11)
+                _ax.set_title(_title)
+            
+        for ax in axes:
+            ax.set_xlabel('Position (m)')
+            ax.set_ylabel('Height (m)')
+            ax.set_aspect('equal')
+        fig.savefig(fname, dpi=dpi)
+
     def init_pot(self, phi=0.0):
         """Initiate potential attributes."""
         nx = self.mesh.nx
