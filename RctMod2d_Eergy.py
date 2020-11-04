@@ -77,7 +77,7 @@ class Eergy2d(object):
         pla: Plasma2d() object.
         txp: Transp2d() object.
         """
-        self._cal_th_cond_coeff(pla)
+        self._calc_th_cond_coeff(pla)
         self._calc_th_flux(pla, txp)
         self.ergy_e += (-self.dQe + self.pwr)*delt
         self.Te = np.divide(self.ergy_e, pla.ne)/1.5/KB_EV
