@@ -45,7 +45,7 @@ class Mesh2d():
         for idx in self.bndy_list:
             self.bndy[idx] = 1
 
-    def add_geom(self, geom):
+    def import_geom(self, geom):
         """Import geometry."""
         self.geom = geom
     
@@ -60,9 +60,9 @@ class Mesh2d():
         tempz = np.linspace(0.0, self.height, self.nz)
         self.x, self.z = np.meshgrid(tempx, tempz)
         self.mat = np.zeros_like(self.x)
-        self._asign_mat()
+        self._assign_mat()
     
-    def _asign_mat(self):
+    def _assign_mat(self):
         """Assign materials to nodes."""
         for _idx, _x in np.ndenumerate(self.x):
             _z = self.z[_idx]
@@ -145,4 +145,5 @@ if __name__ == '__main__':
     print(geom2d)
     
     # generate mesh to imported geometry
-    mesh2d = Mesh
+    mesh2d = Mesh2d()
+    mesh2d.import_geom()
