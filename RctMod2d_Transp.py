@@ -52,8 +52,8 @@ class Transp_2d(object):
         self.Mue = UNIT_CHARGE/EON_MASS/pla.coll_em
         self.Mui = UNIT_CHARGE/pla.Mi/pla.coll_im
 
-    def plot_transp_coeff(self, pla, 
-                          figsize=(8, 8), dpi=300, fname='Transp_coeff.png'):
+    def plot_transp_coeff(self, self, figsize=(8, 8), ihoriz=1, 
+                    dpi=300, fname='Transp_coeff.png', imode='Contour'):
         """
         Plot transp coeff.
         
@@ -61,21 +61,33 @@ class Transp_2d(object):
             use pla.mesh.x for plot
         """
         _x, _z = pla.mesh.x, pla.mesh.z
-        fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
-                                 constrained_layout=True)
+        if ihoriz:
+            fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
+        else:
+            fig, axes = plt.subplots(2, 1, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
+        _levels = np.linspace(1e11, 1e17, 11)
         # plot densities
-        ax = axes[0]
-        ax.scatter(_x, _z, c=self.De, s=1, cmap=colMap, vmin=0.2)
-        ax.set_title('E Diffusion Coeff')
-        ax.set_xlabel('Position (m)')
-        ax.set_ylabel('Height (m)')
-        ax = axes[1]
-        ax.scatter(_x, _z, c=self.Di, s=1, cmap=colMap, vmin=0.2)
-        ax.set_title('Ion Diffusion Coeff')
-        ax.set_xlabel('Position (m)')
-        ax.set_ylabel('Height (m)')
+        if imode == 'Contour':
+            for _ax, _den, _title in zip(axes, (self.De, self.Di), 
+                            ('E Diffusion Coeff', 'Ion Diffusion Coeff')):
+                _cs = _ax.contourf(_x, _z, _den, cmap=colMap, 
+                                   levels=_levels, vmin=1.1e11)
+                _ax.set_title(_title)
+                fig.colorbar(_cs, ax=_ax, shrink=0.9)
+            
+        elif imode == 'Scatter':
+            for _ax, _den, _title in zip(axes, (self.ne, self.ni), 
+                                         ('E Density', 'Ion Density')):
+                _ax.scatter(_x, _z, c=_den, s=5, cmap=colMap, vmin=1.1e11)
+                _ax.set_title(_title)
+            
+        for ax in axes:
+            ax.set_xlabel('Position (m)')
+            ax.set_ylabel('Height (m)')
+            ax.set_aspect('equal')
         fig.savefig(fname, dpi=dpi)
-
     
     def plot_flux(self, pla,
                   figsize=(8, 8), dpi=600, fname='Flux.png'):
