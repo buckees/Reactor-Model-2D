@@ -17,8 +17,7 @@ class Power2d(object):
     
     def __init__(self, pla):
         """Import Plasma1d information."""
-        _nx = pla.mesh.nx
-        self.input = np.zeros(_nx)  # initial eon flux
+        self.input = np.zeros_like(pla.ne)  # initial eon flux
         
         
     def __str__(self):
