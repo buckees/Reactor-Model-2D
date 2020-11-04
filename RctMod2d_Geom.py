@@ -52,45 +52,6 @@ class Domain(Shape):
         res += f'\ndomain = {self.domain} m'
         return res
 
-
-class Interval(Shape):
-    """Interval is a 1D basic shape."""
-    
-    def __init__(self, label, begin, end, axis=0):
-        """
-        Init the Interval.
-        
-        begin: unit in m, var
-        end: unit in m, var
-        axis: ???
-        """
-        Shape.__init__(self, label)
-        self.begin = begin
-        self.end = end
-        self.axis = axis
-        self.type = 'Interval'
-
-    def __str__(self):
-        """Print Interval info."""
-        res = 'Interval:'
-        res += f'\nbegin = {self.begin} m'
-        res += f'\nend = {self.end} m'
-        res += f'\naxis = {self.axis}'
-        return res
-
-    def __contains__(self, posn):
-        """
-        Determind if a position is inside the Interval.
-        
-        posn: unit in m, var, position as input
-        boundaries are not consindered as "Inside"
-        """
-        return self.begin < posn[self.axis] < self.end
-    
-    def boundary(self):
-        """Return the boundary."""
-        pass
-
 class Rectangle(Shape):
     """Rectangle is a 2D basic shape."""
     
@@ -125,19 +86,18 @@ class Rectangle(Shape):
         return all(self.bl < posn < self.ur)
 
 
-class Geometry(Domain):
+class Geom2d():
     """Constuct the geometry."""
     
-    def __init__(self, name='Geometry', bl=(0.0, 0.0), domain=(1.0,1.0),
-                 dim=2, is_cyl=False):
+    def __init__(self, name='Geometry', is_cyl=False):
         """
         Init the geometry.
         
-        dim: dimless, int, must be in [1, 2, 3], 1:1D; 2:2D; 3:3D
+        dim = 2, this class only supports 2D geometry
         is_cyl: bool, wether the geometry is cylidrical symmetric or not
         """
-        super().__init__(name, bl, domain)
-        self.dim = dim
+        self.name = name
+        self.dim = 2
         self.is_cyl = is_cyl
         self.sequence = list()
 
@@ -150,6 +110,8 @@ class Geometry(Domain):
         for shape in self.sequence:
             res += '\n' + str(shape)
         return super(Domain, self).__str__() + res
+
+    def add_domain(self, bl=(0.0, 0.0), domain=(1.0,1.0))
 
     def add_shape(self, shape):
         """
