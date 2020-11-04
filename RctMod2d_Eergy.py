@@ -65,16 +65,6 @@ class Eergy2d(object):
         self.ergy_e += (-self.dQe + pwr.input)*delt
         self.Te = np.divide(self.ergy_e, pla.ne)/1.5/KB_EV
         
-    def set_nonPlasma(self, Te_bc=0.1):
-        """
-        Impose fixed values on the non-plasma materials.
-        
-        Te_bc: eV, var, fixed Te in non-plasma materials.
-        """
-        for _idx, _mat in np.ndenumerate(self.mesh.mat):
-            if _mat:
-                self.Te[_idx] = Te_bc
-        
     def plot_Te(self, pla):
         """
         Plot eon temperature.
