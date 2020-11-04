@@ -17,6 +17,7 @@ class Mesh():
 
     def create_mesh(self, bl=(0.0, 0.0), domain=(1.0, 1.0), ngrid=(11, 11)):
         """Create standalone mesh."""
+        self.bl = np.asarray(bl)
         self.domain = np.asarray(domain)
         self.ngrid = np.asarray(ngrid)
         self.res = np.divide(self.domain, self.ngrid - 1)
@@ -26,9 +27,9 @@ class Mesh():
         tempx = np.linspace(0.0, self.width, self.nx)
         tempz = np.linspace(0.0, self.height, self.nz)
         self.x, self.z = np.meshgrid(tempx, tempz)
-        self.mat = np.ones_like(self.x)
+        self._find_bndy()
 
-    def find_bndy(self):
+    def _find_bndy(self):
         """Add boundaries."""
         self.bndy = np.zeros_like(self.x)
         self.bndy_list = list()
@@ -46,6 +47,26 @@ class Mesh():
 
     def add_geom(self, geom):
         """Import geometry."""
+        self.geom = geom
+    
+    def generate_mesh(self, ngrid=(11, 11)):
+        """Generate mesh according to the imported geometry."""
+        self.width, self.height = self.geom.domain
+        self.ngrid = np.asarray(ngrid)
+        self.nx, self.nz = self.ngrid
+        self.res = np.divide(self.geom.domain, self.ngrid - 1)
+        self.delx, self.delz = self.res
+        tempx = np.linspace(0.0, self.width, self.nx)
+        tempz = np.linspace(0.0, self.height, self.nz)
+        self.x, self.z = np.meshgrid(tempx, tempz)
+        self.mat = np.zeros_like(self.x)
+        self._asign_mat()
+    
+    def _asign_mat(self):
+        """Assign materials to nodes."""
+        
+        
+        
         
 
     def plot(self, figsize=(8, 8), dpi=600, fname='Mesh.png'):
