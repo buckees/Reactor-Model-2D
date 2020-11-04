@@ -30,7 +30,7 @@ class Shape():
 class Domain(Shape):
     """Define the Domain."""
     
-    def __init__(self, name='Demo', bl=(0.0, 0.0), domain=(1.0, 1.0)):
+    def __init__(self, name='Domain', bl=(0.0, 0.0), domain=(1.0, 1.0)):
         """
         Init the Domain.
         
@@ -111,14 +111,19 @@ class Geom2d():
             res += '\n' + str(shape)
         return super(Domain, self).__str__() + res
 
-    def add_domain(self, bl=(0.0, 0.0), domain=(1.0,1.0))
+    def add_domain(self, domain):
+        """
+        Add domain to the geometry.
+        
+        domain: class
+        """
+        pass
 
     def add_shape(self, shape):
         """
         Add shape to the geometry.
         
         shape: class
-        1D - shape is an instance of Interval()
         2D - shape is an instance of Rectangle()
         """
         self.sequence.append(shape)
