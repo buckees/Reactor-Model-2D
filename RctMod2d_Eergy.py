@@ -20,9 +20,6 @@ class Eergy2d(object):
     
     def __init__(self, pla):
         """Import Plasma1d information."""
-        _nx = pla.mesh.nx
-        self.Qe = np.zeros(_nx)  # initial eon flux
-        self.dQe = np.zeros(_nx)  # initial eon flux
         self.Te = deepcopy(pla.Te)
         # eon energy = 3/2 * ne * kTe
         self.ergy_e = 1.5*KB_EV*np.multiply(pla.ne, pla.Te)
@@ -53,16 +50,18 @@ class Eergy2d(object):
         txp: Transp2d object
         """
         # calc convection term
-        self.Qe = 2.5*KB_EV*np.multiply(self.Te, txp.fluxe)
+        self.Qex = 2.5*KB_EV*np.multiply(self.Te, txp.fluxex)
+        self.Qez = 2.5*KB_EV*np.multiply(self.Te, txp.fluxez)
         self.dQe = 2.5*KB_EV*np.multiply(self.Te, txp.dfluxe)
         # calc conduction term
-        self.dTe = pla.geom.cnt_diff(self.Te)
+        self.dTex, self.dTez = pla.geom.cnt_diff(self.Te)
         self.d2Te = pla.geom.cnt_diff_2nd(self.Te)
-        self.Qe -= np.multiply(self.th_cond_e, self.dTe)
+        self.Qex -= np.multiply(self.th_cond_e, self.dTex)
+        self.Qez -= np.multiply(self.th_cond_e, self.dTez)
         self.dQe -= np.multiply(self.th_cond_e, self.d2Te)
         
     def calc_Te(self, delt, pla, pwr):
-        """Calc Te"""
+        """Calc Te."""
         self.ergy_e += (-self.dQe + pwr.input)*delt
         self.Te = np.divide(self.ergy_e, pla.ne)/1.5/KB_EV
         
