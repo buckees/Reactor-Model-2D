@@ -133,7 +133,11 @@ class Plasma2d(object):
         plt.close()
     
     def get_Te(self, een):
-        """Get Te from Eergy2d()."""
+        """
+        Get Te from Eergy2d().
+        
+        een: Eergy2d() boject.
+        """
         self.Te = deepcopy(een.Te)
     
     def plot_Te(self, figsize=(8, 8), ihoriz=1, 
@@ -205,9 +209,9 @@ class Plasma2d(object):
 
         dn/dt = -dFlux/dx + Se
         dn(t + dt) = dn(t) - dFlux/dx*dt + Se*dt
-        delt: time step for explict method
-        txp: object for transport module
-        src: object for reaction module
+        delt: s, var, time step for explict method
+        txp: Transp2d() object
+        src: React2d() object
         """
         self.ne += (-txp.dfluxe + src.se)*delt
         self.ni += (-txp.dfluxi + src.si)*delt
