@@ -59,16 +59,27 @@ class Plasma2d(object):
         self.coll_im = np.ones_like(_x)*(press/10.0*1e7)  # ion coll freq (mom)
         self.Mi = Mi*AMU # ion mass 
         self.set_bc()
+        self.set_nonPlasma()
         self.limit_plasma()
 
     def set_bc(self):
         """Impose b.c. on the plasma."""
-        for idx in self.geom.bndy_list:
-            self.ne[idx] = 1e11
-            self.ni[idx] = 1e11
-            self.nn[idx] = 1e11
-            self.Te[idx] = 0.1
-            self.Ti[idx] = 0.01
+        for _idx in self.geom.bndy_list:
+            self.ne[_idx] = 1e11
+            self.ni[_idx] = 1e11
+            self.nn[_idx] = 1e11
+            self.Te[_idx] = 0.1
+            self.Ti[_idx] = 0.01
+
+    def set_nonPlasma(self):
+        """Impose fixed values on the non-plasma materials."""
+        for _idx, _mat in np.ndenumerate(self.mesh.mat):
+            if _mat:
+                self.ne[_idx] = 1e11
+                self.ni[_idx] = 1e11
+                self.nn[_idx] = 1e11
+                self.Te[_idx] = 0.1
+                self.Ti[_idx] = 0.01
 
     def limit_plasma(self, n_min=1e11, n_max=1e22, T_min=0.001, T_max=100.0):
         """Limit variables in the plasma."""
@@ -159,17 +170,17 @@ class Plasma2d(object):
 
 if __name__ == '__main__':
     """Test Plasma_1d."""
-    from Mesh_temp import Mesh
-    from Transp2d import Diff_2d, Ambi_2d
-    from React2d import React_2d
+    from RctMod2d_Mesh import Mesh2d
+    from RctMod2d_Transp2d import Diff_2d, Ambi_2d
+    from RctMod2d_React2d import React_2d
     domain=(2.0, 4.0)
     mesh2d = Mesh(bl=(-1.0, 0.0), domain=domain, ngrid=(21, 41))
     mesh2d.find_bndy()
     mesh2d.plot()
     
-    pla2d = Plasma_2d(mesh2d)
+    pla2d = Plasma2d(mesh2d)
     pla2d.init_plasma()
-    pla2d.set_bc()
+
     if domain[0] > domain[1]:
         figsize = tuple([domain[0], domain[1]*2])
         ihoriz = 0
