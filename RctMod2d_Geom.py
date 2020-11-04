@@ -28,7 +28,7 @@ class Shape():
         return f'label = {self.label}'
 
 class Domain(Shape):
-    """Define the Domian."""
+    """Define the Domain."""
     
     def __init__(self, name='Demo', bl=(0.0, 0.0), width=1.0, height=1.0):
         """
