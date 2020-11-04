@@ -12,7 +12,7 @@ import numpy as np
 from copy import copy, deepcopy
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-colMap = copy(cm.get_cmap("Accent"))
+colMap = copy(cm.get_cmap("jet"))
 colMap.set_under(color='white')
 
 
@@ -110,20 +110,22 @@ class Plasma2d(object):
         # plot densities
         if imode == 'Contour':
             ax = axes[0]
-            ax.contourf(_x, _z, self.ne, cmap='rainbow', levels=levels)
+            ax.contourf(_x, _z, self.ne, cmap=colMap, 
+                        levels=levels, vmin=1.1e11)
             ax.set_title('E Density')
             
             ax = axes[1]
-            ax.contourf(_x, _z, self.ni, cmap='rainbow', levels=levels)
+            ax.contourf(_x, _z, self.ni, cmap=colMap, 
+                        levels=levels, vmin=1.1e11)
             ax.set_title('Ion Density')
             
         elif imode == 'Scatter':
             ax = axes[0]
-            ax.scatter(_x, _z, c=self.ne, s=1, cmap=colMap, vmin=0.2)
+            ax.scatter(_x, _z, c=self.ne, s=1, cmap=colMap, vmin=1.1e11)
             ax.set_title('E Density')
             
             ax = axes[1]
-            ax.scatter(_x, _z, c=self.ni, s=1, cmap=colMap, vmin=0.2)
+            ax.scatter(_x, _z, c=self.ni, s=1, cmap=colMap, vmin=1.1e11)
             ax.set_title('Ion Density')
             
         for ax in axes:
@@ -180,7 +182,7 @@ if __name__ == '__main__':
     geom2d.add_domain(domain)
     top = Rectangle('Metal', (-1.0, 3.5), (1.0, 4.0))
     geom2d.add_shape(top)
-    bott = Rectangle('Metal', (-0.5, 0.0), (0.5, 0.2))
+    bott = Rectangle('Metal', (-0.5, 0.0), (0.5, 1.0))
     geom2d.add_shape(bott)
     left = Rectangle('Metal', (-1.0, 0.0), (-0.9, 4.0))
     geom2d.add_shape(left)
