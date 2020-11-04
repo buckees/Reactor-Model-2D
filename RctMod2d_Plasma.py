@@ -130,7 +130,11 @@ class Plasma2d(object):
             ax.set_ylabel('Height (m)')
             ax.set_aspect('equal')
         fig.savefig(fname, dpi=dpi)
-
+    
+    def get_Te(self, een):
+        """Get Te from Eergy2d()."""
+        self.Te = deepcopy(een.Te)
+    
     def plot_Te(self, figsize=(8, 8), ihoriz=1, 
                     dpi=300, fname='Plasma.png', imode='Contour'):
         """
