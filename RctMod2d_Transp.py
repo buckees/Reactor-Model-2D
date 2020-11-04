@@ -52,7 +52,7 @@ class Transp_2d(object):
         self.Mue = UNIT_CHARGE/EON_MASS/pla.coll_em
         self.Mui = UNIT_CHARGE/pla.Mi/pla.coll_im
 
-    def plot_transp_coeff(self, self, figsize=(8, 8), ihoriz=1, 
+    def plot_transp_coeff(self, figsize=(8, 8), ihoriz=1, 
                     dpi=300, fname='Transp_coeff.png', imode='Contour'):
         """
         Plot transp coeff.
@@ -184,32 +184,41 @@ class Ambi_2d(Transp_2d):
 
 if __name__ == '__main__':
     """Test the tranp coeff calc."""
-    from Mesh_temp import Mesh
-    from Plasma2d import Plasma_2d
-    mesh2d = Mesh(bl=(-1.0, 0.0), domain=(2.0, 4.0), ngrid=(21, 41))
-    mesh2d.find_bndy()
+    from RctMod2d_Mesh import Mesh2d
+    from RctMod2d_Transp import Diff_2d, Ambi_2d
+    from RctMod2d_React import React_2d
+    from RctMod2d_Geom import Geom2d, Domain, Rectangle
+    from RctMod2d_Plasma import Plasma2d
+    # build the geometry
+    geom2d = Geom2d(name='2D Plasma', is_cyl=False)
+    domain = Domain((-1.0, 0.0), (2.0, 4.0))
+    geom2d.add_domain(domain)
+    top = Rectangle('Metal', (-1.0, 3.5), (1.0, 4.0))
+    geom2d.add_shape(top)
+    bott = Rectangle('Metal', (-0.5, 0.0), (0.5, 1.0))
+    geom2d.add_shape(bott)
+    left = Rectangle('Metal', (-1.0, 0.0), (-0.9, 4.0))
+    geom2d.add_shape(left)
+    right = Rectangle('Metal', (0.9, 0.0), (1.0, 4.0))
+    geom2d.add_shape(right)
+    quartz = Rectangle('Quartz', (-0.9, 3.3), (0.9, 3.5))
+    geom2d.add_shape(quartz)
+    geom2d.plot(fname='geom2d.png')
+    print(geom2d)
+    # generate mesh to imported geometry
+    mesh2d = Mesh2d()
+    mesh2d.import_geom(geom2d)
+    mesh2d.generate_mesh(ngrid=(21, 41))
     mesh2d.plot()
-    
-    pla2d = Plasma_2d(mesh2d)
-    pla2d.init_plasma()
-    pla2d.plot_plasma()
 
-    txp2d = Diff_2d(pla2d)
-    txp2d.calc_transp_coeff(pla2d)
-    # txp2d.plot_transp_coeff(pla2d)
-    txp2d.calc_diff(pla2d)
-    # txp2d.plot_flux(pla2d)
     
-    # from Mesh import Mesh_1d
-    # from Plasma1d import Plasma_1d
-    # mesh1d = Mesh_1d('Plasma_1d', 10e-2, nx=11)
-    # print(mesh1d)
-    # plasma1d = Plasma_1d(mesh1d)
-    # plasma1d.init_plasma()
-    # # Plasma1d.plot_plasma()
-    # txp1d = Diff_1d(plasma1d)
-    # txp1d.calc_transp_coeff(plasma1d)
-    # txp1d.plot_transp_coeff(plasma1d)
-    # txp1d.calc_diff(plasma1d)
-    # txp1d.plot_flux(plasma1d)
-    
+    pla2d = Plasma2d(mesh2d)
+    pla2d.init_plasma()
+
+    if domain.domain[0] > domain.domain[1]:
+        figsize = tuple([domain.domain[0], domain.domain[1]*2])
+        ihoriz = 0
+    else:
+        figsize = tuple([domain.domain[0]*2*1.5, domain.domain[1]])
+        ihoriz = 1
+    pla2d.plot_plasma(figsize=figsize, ihoriz=ihoriz)
