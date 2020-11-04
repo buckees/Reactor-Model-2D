@@ -97,7 +97,7 @@ class Mesh2d():
         for i in range(1, self.nx-1):
             dfx[:, i] = (f[:, i+1] - f[:, i-1])/self.delx/2.0
         for j in range(1, self.nz-1):
-            dfx[j, :] = (f[j+1, :] - f[j-1, :])/self.delz/2.0
+            dfz[j, :] = (f[j+1, :] - f[j-1, :])/self.delz/2.0
         dfx[:, 0], dfx[:, -1] = deepcopy(dfx[:, 1]), deepcopy(dfx[:, -2])
         dfz[0, :], dfz[-1, :] = deepcopy(dfz[1, :]), deepcopy(dfz[-2, :])
         return dfx, dfz
