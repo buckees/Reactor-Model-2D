@@ -94,7 +94,7 @@ class Transp2d(object):
         fig.savefig(fname, dpi=dpi)
     
     def plot_flux(self, pla, figsize=(8, 8), ihoriz=1, 
-                    dpi=300, fname='Transp_coeff.png', imode='Contour'):
+                    dpi=300, fname='flux.png', imode='Contour'):
         """
         Plot flux vs position.
         
@@ -126,7 +126,28 @@ class Transp2d(object):
             ax.set_xlabel('Position (m)')
             ax.set_ylabel('Height (m)')
             ax.set_aspect('equal')
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig('Eon_'+fname, dpi=dpi)
+        
+        # plot dflux
+        if ihoriz:
+            fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
+        else:
+            fig, axes = plt.subplots(2, 1, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
+        # plot flux
+        if imode == 'Contour':
+            for _ax, _den, _title in zip(axes, (self.dfluxe, self.dfluxi), 
+                            ('E dflux', 'Ion dflux')):
+                _cs = _ax.contourf(_x, _z, _den, cmap=colMap)
+                _ax.set_title(_title)
+                fig.colorbar(_cs, ax=_ax, shrink=0.9)
+        
+        for ax in axes:
+            ax.set_xlabel('Position (m)')
+            ax.set_ylabel('Height (m)')
+            ax.set_aspect('equal')
+        fig.savefig('d'+fname, dpi=dpi)
 
 
 class Diff2d(Transp2d):
