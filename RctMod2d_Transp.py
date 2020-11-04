@@ -23,7 +23,7 @@ colMap.set_under(color='white')
 
 
 
-class Transp_2d(object):
+class Transp2d(object):
     """Define the base tranport module/object."""
     
     def __init__(self, pla):
@@ -114,7 +114,7 @@ class Transp_2d(object):
         fig.savefig(fname, dpi=dpi)
 
 
-class Diff_2d(Transp_2d):
+class Diff_2d(Transp2d):
     """
     Calc the dflux for Diffusion Only Module.
     
@@ -135,7 +135,7 @@ class Diff_2d(Transp_2d):
         self.dfluxi = -self.Di * pla.mesh.cnt_diff_2nd(pla.ni)
 
     
-class Ambi_2d(Transp_2d):
+class Ambi_2d(Transp2d):
     """
     Calc the dflux for Ambipolar Diffusion Module.
 
@@ -185,7 +185,6 @@ class Ambi_2d(Transp_2d):
 if __name__ == '__main__':
     """Test the tranp coeff calc."""
     from RctMod2d_Mesh import Mesh2d
-    from RctMod2d_Transp import Diff_2d, Ambi_2d
     from RctMod2d_React import React_2d
     from RctMod2d_Geom import Geom2d, Domain, Rectangle
     from RctMod2d_Plasma import Plasma2d
@@ -222,3 +221,7 @@ if __name__ == '__main__':
         figsize = tuple([domain.domain[0]*2*1.5, domain.domain[1]])
         ihoriz = 1
     pla2d.plot_plasma(figsize=figsize, ihoriz=ihoriz)
+    
+    txp2d = Transp2d(pla2d)
+    txp2d.calc_transp_coeff(pla2d)
+    txp2d.plot_transp_coeff(figsize=figsize, ihoriz=ihoriz)
