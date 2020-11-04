@@ -82,7 +82,7 @@ class Rectangle(Shape):
         posn: unit in m, (2, ) array, position as input
         boundaries are not consindered as "Inside"
         """
-        return all(self.bl < posn < self.ur)
+        return all(self.bl <= posn) and all(posn <= self.ur)
 
 
 class Geom2d():
@@ -205,18 +205,19 @@ class Geom2d():
         fig.savefig(fname, dpi=dpi)
                 
 if __name__ == '__main__':
-    pla2d = Geom2d(name='2D Plasma', is_cyl=False)
+    geom2d = Geom2d(name='2D Plasma', is_cyl=False)
     domain = Domain((-1.0, 0.0), (2.0, 4.0))
-    pla2d.add_domain(domain)
+    geom2d.add_domain(domain)
     top = Rectangle('Metal', (-1.0, 3.5), (1.0, 4.0))
-    pla2d.add_shape(top)
+    geom2d.add_shape(top)
     bott = Rectangle('Metal', (-0.8, 0.0), (0.8, 0.2))
-    pla2d.add_shape(bott)
+    geom2d.add_shape(bott)
     left = Rectangle('Metal', (-1.0, 0.0), (-0.9, 4.0))
-    pla2d.add_shape(left)
+    geom2d.add_shape(left)
     right = Rectangle('Metal', (0.9, 0.0), (1.0, 4.0))
-    pla2d.add_shape(right)
+    geom2d.add_shape(right)
     quartz = Rectangle('Quartz', (-0.9, 3.3), (0.9, 3.5))
-    pla2d.add_shape(quartz)
-    pla2d.plot(fname='pla2d.png')
-    print(pla2d)
+    geom2d.add_shape(quartz)
+    geom2d.plot(fname='geom2d.png')
+    print(geom2d)
+    print(geom2d.get_label(np.array([0., 0.])))
