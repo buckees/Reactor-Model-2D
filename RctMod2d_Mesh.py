@@ -56,10 +56,13 @@ class Mesh2d():
         self.nx, self.nz = self.ngrid
         self.res = np.divide(self.geom.domain, self.ngrid - 1)
         self.delx, self.delz = self.res
-        tempx = np.linspace(0.0, self.width, self.nx)
-        tempz = np.linspace(0.0, self.height, self.nz)
+        tempx = np.linspace(self.geom.bl[0], self.geom.bl[0] + self.width, 
+                            self.nx)
+        tempz = np.linspace(self.geom.bl[1], self.geom.bl[1] + self.height, 
+                            self.nz)
         self.x, self.z = np.meshgrid(tempx, tempz)
         self.mat = np.zeros_like(self.x)
+        self._find_bndy()
         self._assign_mat()
     
     def _assign_mat(self):
@@ -143,7 +146,8 @@ if __name__ == '__main__':
     geom2d.add_shape(quartz)
     geom2d.plot(fname='geom2d.png')
     print(geom2d)
-    
     # generate mesh to imported geometry
     mesh2d = Mesh2d()
-    mesh2d.import_geom()
+    mesh2d.import_geom(geom2d)
+    mesh2d.generate_mesh(ngrid=(21, 41))
+    mesh2d.plot()
