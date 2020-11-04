@@ -40,10 +40,10 @@ class Transp_2d(object):
         """
         Calc diffusion coefficient and mobility.
 
-        pla: Plasma_1d object
-             calc uses pla.Te,i and pla.coll_em
+        pla: Plasma2d object/class
         De,i: m^2/s, (nz, nx) matrix, D = k*T/(m*coll_m)
         Mue,i: m^2/(V*s), (nz, nx) matrix, Mu = q/(m*coll_m)
+        D and Mu depend only on pla.
         """
         # calc diff coeff: D = k*T/(m*coll_m)
         self.De = np.divide(KB_EV*pla.Te, EON_MASS*pla.coll_em)  
@@ -53,11 +53,11 @@ class Transp_2d(object):
         self.Mui = UNIT_CHARGE/pla.Mi/pla.coll_im
 
     def plot_transp_coeff(self, pla, 
-                          figsize=(8, 8), dpi=600, fname='Transp.png'):
+                          figsize=(8, 8), dpi=300, fname='Transp_coeff.png'):
         """
         Plot transp coeff.
         
-        pla: Plasma_1d object
+        pla: Plasma2d object
             use pla.mesh.x for plot
         """
         _x, _z = pla.mesh.x, pla.mesh.z
