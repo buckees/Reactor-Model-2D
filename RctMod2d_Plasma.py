@@ -90,11 +90,15 @@ class Plasma2d(object):
         self.Ti = np.clip(self.Ti, T_min, T_max)
 
     def plot_plasma(self, figsize=(8, 8), ihoriz=1, 
-                    dpi=600, fname='Plasma.png', imode='Contour'):
+                    dpi=300, fname='Plasma.png', imode='Contour'):
         """
-        Plot plasma variables vs. position x.
-
-        density, flux, temperature
+        Plot plasma variables vs. position.
+            
+        var include density, temperature.
+        figsize: a.u., (2, ) tuple, size of fig
+        ihoriz: a.u., var, 0 or 1, set the layout of fig horizontal or not
+        dpi: a.u., dots per inch
+        fname: str, var, name of png file to save
         imode: str, var, ['Contour', 'Scatter']
         """
         _x, _z = self.mesh.x, self.mesh.z

@@ -18,7 +18,7 @@ import numpy as np
 from copy import copy, deepcopy
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-colMap = copy(cm.get_cmap("Accent"))
+colMap = copy(cm.get_cmap("jet"))
 colMap.set_under(color='white')
 
 
@@ -52,13 +52,19 @@ class Transp2d(object):
         self.Mue = UNIT_CHARGE/EON_MASS/pla.coll_em
         self.Mui = UNIT_CHARGE/pla.Mi/pla.coll_im
 
-    def plot_transp_coeff(self, figsize=(8, 8), ihoriz=1, 
+    def plot_transp_coeff(self, pla, figsize=(8, 8), ihoriz=1, 
                     dpi=300, fname='Transp_coeff.png', imode='Contour'):
         """
-        Plot transp coeff.
+        Plot transp coeff vs position.
         
+        var include diffusion coeff and mobility.
         pla: Plasma2d object
-            use pla.mesh.x for plot
+            use pla.mesh.x,z for plot
+        figsize: a.u., (2, ) tuple, size of fig
+        ihoriz: a.u., var, 0 or 1, set the layout of fig horizontal or not
+        dpi: a.u., dots per inch
+        fname: str, var, name of png file to save
+        imode: str, var, ['Contour', 'Scatter']
         """
         _x, _z = pla.mesh.x, pla.mesh.z
         if ihoriz:
@@ -67,20 +73,19 @@ class Transp2d(object):
         else:
             fig, axes = plt.subplots(2, 1, figsize=figsize, dpi=dpi,
                                      constrained_layout=True)
-        _levels = np.linspace(1e11, 1e17, 11)
-        # plot densities
+        
+        # plot transp coeff
         if imode == 'Contour':
             for _ax, _den, _title in zip(axes, (self.De, self.Di), 
                             ('E Diffusion Coeff', 'Ion Diffusion Coeff')):
-                _cs = _ax.contourf(_x, _z, _den, cmap=colMap, 
-                                   levels=_levels, vmin=1.1e11)
+                _cs = _ax.contourf(_x, _z, _den, cmap=colMap)
                 _ax.set_title(_title)
                 fig.colorbar(_cs, ax=_ax, shrink=0.9)
             
         elif imode == 'Scatter':
             for _ax, _den, _title in zip(axes, (self.ne, self.ni), 
                                          ('E Density', 'Ion Density')):
-                _ax.scatter(_x, _z, c=_den, s=5, cmap=colMap, vmin=1.1e11)
+                _ax.scatter(_x, _z, c=_den, s=5, cmap=colMap)
                 _ax.set_title(_title)
             
         for ax in axes:
@@ -89,13 +94,19 @@ class Transp2d(object):
             ax.set_aspect('equal')
         fig.savefig(fname, dpi=dpi)
     
-    def plot_flux(self, pla,
-                  figsize=(8, 8), dpi=600, fname='Flux.png'):
+    def plot_flux(self, pla, figsize=(8, 8), ihoriz=1, 
+                    dpi=300, fname='Transp_coeff.png', imode='Contour'):
         """
-        Plot flux and dflux.
+        Plot flux vs position.
         
-        pla: Plasma_1d object
-            use pla.mesh.x for plot
+        var include flux and dflux.
+        pla: Plasma2d object
+            use pla.mesh.x,z for plot
+        figsize: a.u., (2, ) tuple, size of fig
+        ihoriz: a.u., var, 0 or 1, set the layout of fig horizontal or not
+        dpi: a.u., dots per inch
+        fname: str, var, name of png file to save
+        imode: str, var, ['Contour', 'Scatter']
         """
         _x, _z = pla.mesh.x, pla.mesh.z
         fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
@@ -224,4 +235,4 @@ if __name__ == '__main__':
     
     txp2d = Transp2d(pla2d)
     txp2d.calc_transp_coeff(pla2d)
-    txp2d.plot_transp_coeff(figsize=figsize, ihoriz=ihoriz)
+    txp2d.plot_transp_coeff(pla=pla2d, figsize=figsize, ihoriz=ihoriz)
