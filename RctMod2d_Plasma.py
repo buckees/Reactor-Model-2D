@@ -155,20 +155,18 @@ class Plasma2d(object):
             fig, axes = plt.subplots(2, 1, figsize=figsize, dpi=dpi,
                                      constrained_layout=True)
         
-        _levels = np.linspace(1e11, 1e17, 11)
         # plot densities
         if imode == 'Contour':
             for _ax, _den, _title in zip(axes, (self.Te, self.Ti), 
                                 ('E Temperature', 'Ion Temperature')):
-                _cs = _ax.contourf(_x, _z, _den, cmap=colMap, 
-                                   levels=_levels, vmin=1.1e11)
+                _cs = _ax.contourf(_x, _z, _den, cmap=colMap)
                 _ax.set_title(_title)
                 fig.colorbar(_cs, ax=_ax, shrink=0.9)
             
         elif imode == 'Scatter':
             for _ax, _den, _title in zip(axes, (self.Te, self.Ti), 
                                 ('E Temperature', 'Ion Temperature')):
-                _ax.scatter(_x, _z, c=_den, s=5, cmap=colMap, vmin=1.1e11)
+                _ax.scatter(_x, _z, c=_den, s=5, cmap=colMap)
                 _ax.set_title(_title)
             
         for ax in axes:
@@ -252,6 +250,7 @@ if __name__ == '__main__':
         figsize = tuple([domain.domain[0]*2*1.5, domain.domain[1]])
         ihoriz = 1
     pla2d.plot_plasma(figsize=figsize, ihoriz=ihoriz)
+    pla2d.plot_Te(figsize=figsize, ihoriz=ihoriz)
     
     # calc the transport 
     # txp2d = Diff_2d(pla2d)
