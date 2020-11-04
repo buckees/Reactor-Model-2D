@@ -164,7 +164,7 @@ class Plasma2d(object):
 
 
 if __name__ == '__main__':
-    """Test Plasma_1d."""
+    """Test Plasma2d."""
     from RctMod2d_Mesh import Mesh2d
     from RctMod2d_Transp import Diff_2d, Ambi_2d
     from RctMod2d_React import React_2d
