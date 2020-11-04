@@ -29,8 +29,10 @@ class Transp_2d(object):
     def __init__(self, pla):
         """Import geometry information."""
         _x = pla.mesh.x
-        self.fluxe = np.zeros_like(_x)  # initial eon flux
-        self.fluxi = np.zeros_like(_x)  # initial ion flux
+        self.fluxex = np.zeros_like(_x)  # initial eon flux in x direction
+        self.fluxez = np.zeros_like(_x)  # initial eon flux in z direction
+        self.fluxix = np.zeros_like(_x)  # initial ion flux in x direction
+        self.fluxiz = np.zeros_like(_x)  # initial ion flux in z direction
         self.dfluxe = np.zeros_like(_x)  # initial eon flux
         self.dfluxi = np.zeros_like(_x)  # initial ion flux
 
@@ -40,8 +42,8 @@ class Transp_2d(object):
 
         pla: Plasma_1d object
              calc uses pla.Te,i and pla.coll_em
-        De,i: m^2/s, D = k*T/(m*coll_m)
-        Mue,i: m^2/(V*s), Mu = q/(m*coll_m)
+        De,i: m^2/s, (nz, nx) matrix, D = k*T/(m*coll_m)
+        Mue,i: m^2/(V*s), (nz, nx) matrix, Mu = q/(m*coll_m)
         """
         # calc diff coeff: D = k*T/(m*coll_m)
         self.De = np.divide(KB_EV*pla.Te, EON_MASS*pla.coll_em)  
