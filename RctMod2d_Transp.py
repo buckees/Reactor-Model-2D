@@ -73,7 +73,6 @@ class Transp2d(object):
         else:
             fig, axes = plt.subplots(2, 1, figsize=figsize, dpi=dpi,
                                      constrained_layout=True)
-        
         # plot transp coeff
         if imode == 'Contour':
             for _ax, _den, _title in zip(axes, (self.De, self.Di), 
@@ -109,9 +108,13 @@ class Transp2d(object):
         imode: str, var, ['Contour', 'Scatter']
         """
         _x, _z = pla.mesh.x, pla.mesh.z
-        fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
-                                 constrained_layout=True)
-        # plot densities
+        if ihoriz:
+            fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
+        else:
+            fig, axes = plt.subplots(2, 1, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
+        # plot flux
         ax = axes[0]
         ax.scatter(_x, _z, c=self.fluxe, s=1, cmap=colMap, vmin=0.2)
         ax.set_title('E Flux')
@@ -125,7 +128,7 @@ class Transp2d(object):
         fig.savefig(fname, dpi=dpi)
 
 
-class Diff_2d(Transp2d):
+class Diff2d(Transp2d):
     """
     Calc the dflux for Diffusion Only Module.
     
@@ -146,7 +149,7 @@ class Diff_2d(Transp2d):
         self.dfluxi = -self.Di * pla.mesh.cnt_diff_2nd(pla.ni)
 
     
-class Ambi_2d(Transp2d):
+class Ambi2d(Transp2d):
     """
     Calc the dflux for Ambipolar Diffusion Module.
 
