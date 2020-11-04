@@ -152,7 +152,7 @@ class Geom2d():
         label: str, var, label of the shape
         """
         # what if return None
-        label = None
+        label = 'Plasma'
         for shape in self.sequence:
             if posn in shape:
                 label = shape.label
