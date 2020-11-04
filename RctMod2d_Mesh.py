@@ -1,5 +1,8 @@
 """
-Temporary Mesh
+Mesh Module.
+
+Create standalone mesh or
+Create mesh for input geometry.
 """
 
 import numpy as np
@@ -12,7 +15,8 @@ colMap.set_under(color='white')
 class Mesh():
     """Define 2d Mesh."""
 
-    def __init__(self, bl=(0.0, 0.0), domain=(1.0, 1.0), ngrid=(11, 11)):
+    def create_mesh(self, bl=(0.0, 0.0), domain=(1.0, 1.0), ngrid=(11, 11)):
+        """Create standalone mesh."""
         self.domain = np.asarray(domain)
         self.ngrid = np.asarray(ngrid)
         self.res = np.divide(self.domain, self.ngrid - 1)
@@ -40,9 +44,9 @@ class Mesh():
         for idx in self.bndy_list:
             self.bndy[idx] = 1
 
-    def add_mat(self):
-        """Add materials."""
-        pass
+    def add_geom(self, geom):
+        """Import geometry."""
+        
 
     def plot(self, figsize=(8, 8), dpi=600, fname='Mesh.png'):
         """Plot mesh."""
