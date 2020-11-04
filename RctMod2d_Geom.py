@@ -36,6 +36,7 @@ class Domain(Shape):
         
         bl: unit in m, (2, ) tuple
         domain: unit in m, (2, ) tuple, width and height
+        label: Domain label is fixed to 'Plasma'
         """
         self.bl = np.asarray(bl)
         self.domain = np.asarray(domain)
@@ -87,7 +88,7 @@ class Rectangle(Shape):
 class Geom2d():
     """Constuct the geometry."""
     
-    def __init__(self, name='Geometry', is_cyl=False, ):
+    def __init__(self, name='Geometry', is_cyl=False):
         """
         Init the geometry.
         
@@ -114,8 +115,11 @@ class Geom2d():
         Add domain to the geometry.
         
         domain: class
+        bl: unit in m, (2, ) tuple
+        domain: unit in m, (2, ) tuple, width and height
         """
-        pass
+        self.bl = domain.bl
+        self.domain = domain.domain
 
     def add_shape(self, shape):
         """
@@ -167,7 +171,7 @@ class Geom2d():
             if shape.type == 'Rectangle':
                 ax.add_patch(
                     patch.Rectangle(shape.bl, shape.width, shape.height,
-                                    facecolor='k', edgecolor='b'))
+                                    facecolor='k'))
         ax = axes[1]
         ax.add_patch(
             patch.Rectangle(self.bl, self.width, self.height, 
@@ -178,8 +182,8 @@ class Geom2d():
                     patch.Rectangle(shape.bl, shape.width, shape.height,
                                     facecolor='w', edgecolor='w'))
         for ax in axes:
-            ax.set_xlim(self.bl[0], self.bl[0] + self.width)
-            ax.set_ylim(self.bl[1], self.bl[1] + self.height)
+            ax.set_xlim(self.bl[0], self.bl[0] + self.domain[0])
+            ax.set_ylim(self.bl[1], self.bl[1] + self.domain[1])
         fig.savefig(fname, dpi=dpi)
                 
 if __name__ == '__main__':
