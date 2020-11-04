@@ -157,8 +157,8 @@ class Ambi_2d(Transp_2d):
         _dnix, _dniz = pla.mesh.cnt_diff(pla.ni)
         self.Eax = np.divide(self.Di - self.De, self.Mui + self.Mue)
         self.Eaz = deepcopy(self.Eax)
-        self.Eax *= np.divide(_dnix, pla.nix)
-        self.Eaz *= np.divide(_dniz, pla.niz)
+        self.Eax *= np.divide(_dnix, pla.ni)
+        self.Eaz *= np.divide(_dniz, pla.ni)
         # # Calc flux
         self.fluxex, self.fluxez = -self.Da * pla.mesh.cnt_diff(pla.ne)
         self.fluxix, self.fluxiz = -self.Da * pla.mesh.cnt_diff(pla.ni)
