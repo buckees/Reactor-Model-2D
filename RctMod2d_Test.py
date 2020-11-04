@@ -64,10 +64,12 @@ pla2d.plot_Te(figsize=figsize, ihoriz=ihoriz)
 txp2d = Ambi2d(pla2d)
 txp2d.calc_transp_coeff(pla2d)
 # txp2d.plot_transp_coeff(pla2d)
-# init Eergy module
-een2d = Eergy2d(pla2d)
 # init React module
 src2d = React_2d(pla2d)
+# init Eergy module
+een2d = Eergy2d(pla2d)
+# init Power module
+pwr2d = Power2d(pla2d)
 #
 ne_ave, ni_ave = [], []
 time = []
@@ -85,8 +87,8 @@ for itn in range(niter):
         # txp2d.plot_flux(pla2d)
         pla2d.plot_plasma(fname=f'plasma_itn{itn+1}', 
                           figsize=figsize, ihoriz=ihoriz)
-        txp2d.plot_flux(pla=pla2d, fname=f'flux_itn{itn+1}',
-                        figsize=figsize, ihoriz=ihoriz)
+        # txp2d.plot_flux(pla=pla2d, fname=f'flux_itn{itn+1}',
+        #                 figsize=figsize, ihoriz=ihoriz)
 fig = plt.figure(figsize=(4, 4), dpi=300)
 plt.plot(time, ne_ave, 'b-')
 plt.plot(time, ni_ave, 'r-')
