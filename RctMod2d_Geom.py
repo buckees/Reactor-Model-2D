@@ -30,15 +30,13 @@ class Shape():
 class Domain(Shape):
     """Define the Domain."""
     
-    def __init__(self, name='Domain', bl=(0.0, 0.0), domain=(1.0, 1.0)):
+    def __init__(self, bl=(0.0, 0.0), domain=(1.0, 1.0)):
         """
         Init the Domain.
         
-        name: str, var, name of domain.
         bl: unit in m, (2, ) tuple
         domain: unit in m, (2, ) tuple, width and height
         """
-        self.name = name
         self.bl = np.asarray(bl)
         self.domain = np.asarray(domain)
         super().__init__(label='Plasma')
@@ -89,7 +87,7 @@ class Rectangle(Shape):
 class Geom2d():
     """Constuct the geometry."""
     
-    def __init__(self, name='Geometry', is_cyl=False):
+    def __init__(self, name='Geometry', is_cyl=False, ):
         """
         Init the geometry.
         
