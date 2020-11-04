@@ -19,7 +19,7 @@ class React_2d(object):
     
     def __init__(self, pla):
         """Import geometry information."""
-        _x = pla.geom.x
+        _x = pla.mesh.x
         self.se = np.zeros_like(_x)  # initial eon flux
         self.si = np.zeros_like(_x)  # initial ion flux
         
