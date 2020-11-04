@@ -108,7 +108,7 @@ class Geom2d():
         res += '\nGeometry sequence:'
         for shape in self.sequence:
             res += '\n' + str(shape)
-        return super(Domain, self).__str__() + res
+        return res
 
     def add_domain(self, domain):
         """
@@ -120,6 +120,8 @@ class Geom2d():
         """
         self.bl = domain.bl
         self.domain = domain.domain
+        self.label ={'Plasma':0}
+        self.num_mat = 1
 
     def add_shape(self, shape):
         """
@@ -128,7 +130,17 @@ class Geom2d():
         shape: class
         2D - shape is an instance of Rectangle()
         """
-        self.sequence.append(shape)
+        if self.domain:
+            self.sequence.append(shape)
+            if shape.label in self.label:
+                pass
+            else:
+                self.num_mat += 1
+                self.label[shape.lable] = self.num_mat
+        else:
+            res = 'Domian is not added yet.'
+            res += '\nRun self.add_domain() before self.add_shape()'
+            return res
 
     def get_label(self, posn):
         """
@@ -174,7 +186,7 @@ class Geom2d():
                                     facecolor='k'))
         ax = axes[1]
         ax.add_patch(
-            patch.Rectangle(self.bl, self.width, self.height, 
+            patch.Rectangle(self.bl, self.domain[0], self.domain[1], 
                             facecolor='b'))
         for shape in self.sequence:
             if shape.type == 'Rectangle':
@@ -187,15 +199,16 @@ class Geom2d():
         fig.savefig(fname, dpi=dpi)
                 
 if __name__ == '__main__':
-    icp2d = Geometry(name='2D ICP', bl=(-1.0, 0.0), width=2.0, height=4.0, 
-                     dim=2, is_cyl=False)
+    pla2d = Geom2d(name='2D Plasma', is_cyl=False)
+    domain = Domain((-1.0, 0.0), (2.0, 4.0))
+    pla2d.add_domain(domain)
     top = Rectangle('Metal', (-1.0, 3.5), (1.0, 4.0))
-    icp2d.add_shape(top)
+    pla2d.add_shape(top)
     bott = Rectangle('Metal', (-0.8, 0.0), (0.8, 0.2))
-    icp2d.add_shape(bott)
+    pla2d.add_shape(bott)
     left = Rectangle('Metal', (-1.0, 0.0), (-0.9, 4.0))
-    icp2d.add_shape(left)
+    pla2d.add_shape(left)
     right = Rectangle('Metal', (0.9, 0.0), (1.0, 4.0))
-    icp2d.add_shape(right)
-    icp2d.plot(fname='ICP2d.png')
-    print(icp2d)
+    pla2d.add_shape(right)
+    pla2d.plot(fname='pla2d.png')
+    print(pla2d)
