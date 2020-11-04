@@ -98,6 +98,8 @@ class Geom2d():
         self.name = name
         self.dim = 2
         self.is_cyl = is_cyl
+        self.num_mat = 0
+        self.label = None
         self.sequence = list()
 
     def __str__(self):
@@ -130,13 +132,13 @@ class Geom2d():
         shape: class
         2D - shape is an instance of Rectangle()
         """
-        if self.domain:
+        if self.num_mat:
             self.sequence.append(shape)
             if shape.label in self.label:
                 pass
             else:
                 self.num_mat += 1
-                self.label[shape.lable] = self.num_mat
+                self.label[shape.label] = self.num_mat - 1
         else:
             res = 'Domian is not added yet.'
             res += '\nRun self.add_domain() before self.add_shape()'
@@ -154,7 +156,7 @@ class Geom2d():
         for shape in self.sequence:
             if posn in shape:
                 label = shape.label
-        return label
+        return label, self.label[label]
 
     def label_check(self, posn, label):
         """
@@ -175,19 +177,23 @@ class Geom2d():
         figsize: unit in inch, (2, ) tuple, determine the fig/canvas size
         dpi: dimless, int, Dots Per Inch
         """
+        color_dict = {0:'white', 1:'black', 2:'green', 3:'yellow', 
+                      4:'purple'}
         fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
                          constrained_layout=True)
         ax = axes[0]
         
         for shape in self.sequence:
             if shape.type == 'Rectangle':
+                
+                temp_col = color_dict[self.label[shape.label]]
                 ax.add_patch(
                     patch.Rectangle(shape.bl, shape.width, shape.height,
-                                    facecolor='k'))
+                                    facecolor=temp_col))
         ax = axes[1]
         ax.add_patch(
             patch.Rectangle(self.bl, self.domain[0], self.domain[1], 
-                            facecolor='b'))
+                            facecolor='purple'))
         for shape in self.sequence:
             if shape.type == 'Rectangle':
                 ax.add_patch(
@@ -210,5 +216,7 @@ if __name__ == '__main__':
     pla2d.add_shape(left)
     right = Rectangle('Metal', (0.9, 0.0), (1.0, 4.0))
     pla2d.add_shape(right)
+    quartz = Rectangle('Quartz', (-0.9, 3.3), (0.9, 3.5))
+    pla2d.add_shape(quartz)
     pla2d.plot(fname='pla2d.png')
     print(pla2d)
