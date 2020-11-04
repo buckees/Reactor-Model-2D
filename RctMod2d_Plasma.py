@@ -19,15 +19,15 @@ colMap.set_under(color='white')
 class Plasma2d(object):
     """Define 2d Plasma."""
 
-    def __init__(self, geom):
+    def __init__(self, mesh):
         """
-        Plasma_2d is defined as a container.
+        Plasma2d is defined as a container.
 
         Plasma_2d as a basket containing:
-            geometry
+            mesh
             physics.
         """
-        self.geom = deepcopy(geom)
+        self.mesh = mesh
 
     def init_plasma(self, ne=1e17, press=10, Te=1, Ti=0.1, Mi=40):
         """
