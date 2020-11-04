@@ -16,7 +16,7 @@ colMap = copy(cm.get_cmap("Accent"))
 colMap.set_under(color='white')
 
 
-class Plasma_2d(object):
+class Plasma2d(object):
     """Define 2d Plasma."""
 
     def __init__(self, geom):
