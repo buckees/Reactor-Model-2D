@@ -30,19 +30,17 @@ class Shape():
 class Domain(Shape):
     """Define the Domain."""
     
-    def __init__(self, name='Demo', bl=(0.0, 0.0), width=1.0, height=1.0):
+    def __init__(self, name='Demo', bl=(0.0, 0.0), domain=(1.0, 1.0)):
         """
         Init the Domain.
         
         name: str, var, name of domain.
         bl: unit in m, (2, ) tuple
-        width: unit in m, var, width of domain
-        height: unit in m, var, height of domain
+        domain: unit in m, (2, ) tuple, width and height
         """
         self.name = name
-        self.bl = bl
-        self.width = width
-        self.height = height
+        self.bl = np.asarray(bl)
+        self.domain = np.asarray(domain)
         super().__init__(label='Plasma')
 
     def __str__(self):
@@ -51,8 +49,7 @@ class Domain(Shape):
         res += f'\nname = {self.name}'
         res += f'\nlabel = {self.label}'
         res += f'\nbottom left = {self.bl} m'
-        res += f'\nwidth = {self.width} m'
-        res += f'\nheight = {self.height} m'
+        res += f'\ndomain = {self.domain} m'
         return res
 
 
@@ -131,7 +128,7 @@ class Rectangle(Shape):
 class Geometry(Domain):
     """Constuct the geometry."""
     
-    def __init__(self, name='Geometry', bl=(0.0, 0.0), width=1.0, height=1.0,
+    def __init__(self, name='Geometry', bl=(0.0, 0.0), domain=(1.0,1.0),
                  dim=2, is_cyl=False):
         """
         Init the geometry.
@@ -139,7 +136,7 @@ class Geometry(Domain):
         dim: dimless, int, must be in [1, 2, 3], 1:1D; 2:2D; 3:3D
         is_cyl: bool, wether the geometry is cylidrical symmetric or not
         """
-        super().__init__(name, bl, width, height)
+        super().__init__(name, bl, domain)
         self.dim = dim
         self.is_cyl = is_cyl
         self.sequence = list()
