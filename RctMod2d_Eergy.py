@@ -15,14 +15,14 @@ import matplotlib.pyplot as plt
 from copy import deepcopy
 
 
-class Eergy_1d(object):
+class Eergy2d(object):
     """Define the eon energy module/object."""
     
     def __init__(self, pla):
         """Import Plasma1d information."""
-        nx = pla.geom.nx
-        self.Qe = np.zeros(nx)  # initial eon flux
-        self.dQe = np.zeros(nx)  # initial eon flux
+        _nx = pla.mesh.nx
+        self.Qe = np.zeros(_nx)  # initial eon flux
+        self.dQe = np.zeros(_nx)  # initial eon flux
         self.Te = deepcopy(pla.Te)
         # eon energy = 3/2 * ne * kTe
         self.ergy_e = 1.5*KB_EV*np.multiply(pla.ne, pla.Te)
@@ -30,25 +30,27 @@ class Eergy_1d(object):
         
     def __str__(self):
         """Print eon energy module."""
-        return f'label = {self.qdfluxe}'
+        return f'energy flux = {self.qdfluxe}'
     
     def calc_th_cond_coeff(self, pla):
         """
         Calc thermal conduction coefficient.
 
-        pla: Plasma_1d object
-             calc uses pla.Te,i and pla.coll_em
-        heat_cond_e: W/m/K, heat conductivity for eon
+        pla: Plasma2d object
+        heat_cond_e: W/m/K, (nz, nx) matrix, heat conductivity for eon
+        th_cond_e depend only on pla.
         """
         # calc thermal conductivity for eon
         self.th_cond_e = np.ones_like(pla.ne)*1e-3
     
     def calc_th_flux(self, pla, txp):
         """
-        Calc eon thermal flux, Qe
+        Calc eon thermal flux, Qe.
         
         Qe = 5/2kTe * fluxe - ke * dTe/dx
         dQe = 5/2kTe * dfluxe - ke * d2Te/dx2
+        pla: Plasma2d object
+        txp: Transp2d object
         """
         # calc convection term
         self.Qe = 2.5*KB_EV*np.multiply(self.Te, txp.fluxe)
