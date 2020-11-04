@@ -6,11 +6,8 @@ Create mesh for input geometry.
 """
 
 import numpy as np
-from copy import copy, deepcopy
+from copy import deepcopy
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-colMap = copy(cm.get_cmap("Accent"))
-colMap.set_under(color='white')
 
 class Mesh2d():
     """Define 2d Mesh."""
@@ -74,12 +71,13 @@ class Mesh2d():
 
     def plot(self, figsize=(8, 8), dpi=600, fname='Mesh.png'):
         """Plot mesh."""
+        colMap = plt.get_cmap('Set1')
         fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
                                  constrained_layout=True)
         ax = axes[0]
-        ax.scatter(self.x, self.z, c=self.mat, s=1, cmap=colMap, vmin=0.2)
+        ax.scatter(self.x, self.z, c=self.mat, s=10, cmap=colMap)
         ax = axes[1]
-        ax.scatter(self.x, self.z, c=self.bndy, s=1, cmap=colMap, vmin=0.2)
+        ax.scatter(self.x, self.z, c=self.bndy, s=10, cmap=colMap)
         fig.savefig(fname, dpi=dpi)
 
     def cnt_diff(self, f):
