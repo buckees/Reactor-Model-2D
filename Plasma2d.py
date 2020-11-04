@@ -162,8 +162,8 @@ if __name__ == '__main__':
     from Mesh_temp import Mesh
     from Transp2d import Diff_2d, Ambi_2d
     from React2d import React_2d
-    domain=(8.0, 2.0)
-    mesh2d = Mesh(bl=(-1.0, 0.0), domain=domain, ngrid=(81, 21))
+    domain=(2.0, 4.0)
+    mesh2d = Mesh(bl=(-1.0, 0.0), domain=domain, ngrid=(21, 41))
     mesh2d.find_bndy()
     mesh2d.plot()
     
