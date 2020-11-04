@@ -105,28 +105,21 @@ class Plasma2d(object):
             fig, axes = plt.subplots(2, 1, figsize=figsize, dpi=dpi,
                                      constrained_layout=True)
         
-        levels = np.linspace(1e11, 1e17, 11)
-        
+        _levels = np.linspace(1e11, 1e17, 11)
         # plot densities
         if imode == 'Contour':
-            ax = axes[0]
-            ax.contourf(_x, _z, self.ne, cmap=colMap, 
-                        levels=levels, vmin=1.1e11)
-            ax.set_title('E Density')
-            
-            ax = axes[1]
-            ax.contourf(_x, _z, self.ni, cmap=colMap, 
-                        levels=levels, vmin=1.1e11)
-            ax.set_title('Ion Density')
+            for _ax, _den, _title in zip(axes, (self.ne, self.ni), 
+                                         ('E Density', 'Ion Density')):
+                _cs = _ax.contourf(_x, _z, _den, cmap=colMap, 
+                                   levels=_levels, vmin=1.1e11)
+                _ax.set_title(_title)
+                fig.colorbar(_cs, ax=_ax, shrink=0.9)
             
         elif imode == 'Scatter':
-            ax = axes[0]
-            ax.scatter(_x, _z, c=self.ne, s=1, cmap=colMap, vmin=1.1e11)
-            ax.set_title('E Density')
-            
-            ax = axes[1]
-            ax.scatter(_x, _z, c=self.ni, s=1, cmap=colMap, vmin=1.1e11)
-            ax.set_title('Ion Density')
+            for _ax, _den, _title in zip(axes, (self.ne, self.ni), 
+                                         ('E Density', 'Ion Density')):
+                _ax.scatter(_x, _z, c=_den, s=5, cmap=colMap, vmin=1.1e11)
+                _ax.set_title(_title)
             
         for ax in axes:
             ax.set_xlabel('Position (m)')
@@ -206,7 +199,7 @@ if __name__ == '__main__':
         figsize = tuple([domain.domain[0], domain.domain[1]*2])
         ihoriz = 0
     else:
-        figsize = tuple([domain.domain[0]*2, domain.domain[1]])
+        figsize = tuple([domain.domain[0]*2*1.5, domain.domain[1]])
         ihoriz = 1
     pla2d.plot_plasma(figsize=figsize, ihoriz=ihoriz)
     
