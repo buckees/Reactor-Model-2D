@@ -28,13 +28,12 @@ class Transp2d(object):
     
     def __init__(self, pla):
         """Import geometry information."""
-        _x = pla.mesh.x
-        self.fluxex = np.zeros_like(_x)  # initial eon flux in x direction
-        self.fluxez = np.zeros_like(_x)  # initial eon flux in z direction
-        self.fluxix = np.zeros_like(_x)  # initial ion flux in x direction
-        self.fluxiz = np.zeros_like(_x)  # initial ion flux in z direction
-        self.dfluxe = np.zeros_like(_x)  # initial eon flux
-        self.dfluxi = np.zeros_like(_x)  # initial ion flux
+        self.fluxex = np.zeros_like(pla.ne)  # initial eon flux in x direction
+        self.fluxez = np.zeros_like(pla.ne)  # initial eon flux in z direction
+        self.fluxix = np.zeros_like(pla.ne)  # initial ion flux in x direction
+        self.fluxiz = np.zeros_like(pla.ne)  # initial ion flux in z direction
+        self.dfluxe = np.zeros_like(pla.ne)  # initial eon flux
+        self.dfluxi = np.zeros_like(pla.ne)  # initial ion flux
 
     def calc_transp_coeff(self, pla):
         """
