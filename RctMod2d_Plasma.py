@@ -170,7 +170,7 @@ class Plasma2d(object):
 if __name__ == '__main__':
     """Test Plasma2d."""
     from RctMod2d_Mesh import Mesh2d
-    from RctMod2d_Transp import Diff_2d, Ambi_2d
+    from RctMod2d_Transp import Diff2d, Ambi2d
     from RctMod2d_React import React_2d
     from RctMod2d_Geom import Geom2d, Domain, Rectangle
     # build the geometry
@@ -209,7 +209,7 @@ if __name__ == '__main__':
     
     # calc the transport 
     # txp2d = Diff_2d(pla2d)
-    txp2d = Ambi_2d(pla2d)
+    txp2d = Ambi2d(pla2d)
     txp2d.calc_transp_coeff(pla2d)
     # txp2d.plot_transp_coeff(pla2d)
     # calc source term
@@ -231,6 +231,8 @@ if __name__ == '__main__':
             # txp2d.plot_flux(pla2d)
             pla2d.plot_plasma(fname=f'plasma_itn{itn+1}', 
                               figsize=figsize, ihoriz=ihoriz)
+            txp2d.plot_flux(pla=pla2d, fname=f'flux_itn{itn+1}',
+                            figsize=figsize, ihoriz=ihoriz)
     fig = plt.figure(figsize=(4, 4), dpi=300)
     plt.plot(time, ne_ave, 'b-')
     plt.plot(time, ni_ave, 'r-')
