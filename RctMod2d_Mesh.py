@@ -12,7 +12,7 @@ import matplotlib.cm as cm
 colMap = copy(cm.get_cmap("Accent"))
 colMap.set_under(color='white')
 
-class Mesh():
+class Mesh2d():
     """Define 2d Mesh."""
 
     def create_mesh(self, bl=(0.0, 0.0), domain=(1.0, 1.0), ngrid=(11, 11)):
@@ -64,10 +64,10 @@ class Mesh():
     
     def _asign_mat(self):
         """Assign materials to nodes."""
-        
-        
-        
-        
+        for _idx, _x in np.ndenumerate(self.x):
+            _z = self.z[_idx]
+            _posn = np.array([_x, _z])
+            _label, self.mat[_idx] = self.geom.get_label(_posn)
 
     def plot(self, figsize=(8, 8), dpi=600, fname='Mesh.png'):
         """Plot mesh."""
@@ -126,7 +126,23 @@ class Mesh():
 
 if __name__ == '__main__':
     """Test Mesh."""
-    icp2d = Mesh(bl=(-1.0, 0.0), domain=(2.0, 4.0), ngrid=(21, 41))
-    icp2d.find_bndy()
-    icp2d.plot()
-
+    from RctMod2d_Geom import Geom2d, Domain, Rectangle
+    # build the geometry
+    geom2d = Geom2d(name='2D Plasma', is_cyl=False)
+    domain = Domain((-1.0, 0.0), (2.0, 4.0))
+    geom2d.add_domain(domain)
+    top = Rectangle('Metal', (-1.0, 3.5), (1.0, 4.0))
+    geom2d.add_shape(top)
+    bott = Rectangle('Metal', (-0.8, 0.0), (0.8, 0.2))
+    geom2d.add_shape(bott)
+    left = Rectangle('Metal', (-1.0, 0.0), (-0.9, 4.0))
+    geom2d.add_shape(left)
+    right = Rectangle('Metal', (0.9, 0.0), (1.0, 4.0))
+    geom2d.add_shape(right)
+    quartz = Rectangle('Quartz', (-0.9, 3.3), (0.9, 3.5))
+    geom2d.add_shape(quartz)
+    geom2d.plot(fname='geom2d.png')
+    print(geom2d)
+    
+    # generate mesh to imported geometry
+    mesh2d = Mesh
