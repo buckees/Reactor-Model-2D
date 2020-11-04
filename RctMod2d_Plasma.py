@@ -130,6 +130,7 @@ class Plasma2d(object):
             ax.set_ylabel('Height (m)')
             ax.set_aspect('equal')
         fig.savefig(fname, dpi=dpi)
+        plt.close()
     
     def get_Te(self, een):
         """Get Te from Eergy2d()."""
@@ -174,6 +175,7 @@ class Plasma2d(object):
             ax.set_ylabel('Height (m)')
             ax.set_aspect('equal')
         fig.savefig(fname, dpi=dpi)
+        plt.close()
 
     def init_pot(self, phi=0.0):
         """Initiate potential attributes."""

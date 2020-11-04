@@ -91,6 +91,7 @@ class Transp2d(object):
             ax.set_ylabel('Height (m)')
             ax.set_aspect('equal')
         fig.savefig(fname, dpi=dpi)
+        plt.close()
     
     def plot_flux(self, pla, figsize=(8, 8), ihoriz=1, 
                     dpi=300, fname='flux.png', imode='Contour'):
@@ -147,6 +148,7 @@ class Transp2d(object):
             ax.set_ylabel('Height (m)')
             ax.set_aspect('equal')
         fig.savefig('d'+fname, dpi=dpi)
+        plt.close()
 
 
 class Diff2d(Transp2d):
