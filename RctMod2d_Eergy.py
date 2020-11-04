@@ -73,6 +73,7 @@ class Eergy2d(object):
         """
         Calc Te.
         
+        delt: s, var, time step for explict method
         pla: Plasma2d() object.
         txp: Transp2d() object.
         """
