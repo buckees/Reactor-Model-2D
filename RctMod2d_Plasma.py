@@ -252,12 +252,14 @@ if __name__ == '__main__':
     pla2d.plot_plasma(figsize=figsize, ihoriz=ihoriz)
     pla2d.plot_Te(figsize=figsize, ihoriz=ihoriz)
     
-    # calc the transport 
+    # init Transp module
     # txp2d = Diff_2d(pla2d)
     txp2d = Ambi2d(pla2d)
     txp2d.calc_transp_coeff(pla2d)
     # txp2d.plot_transp_coeff(pla2d)
-    # calc source term
+    # init Eergy module
+    een2d = Eergy2d(pla2d)
+    # init React module
     src2d = React_2d(pla2d)
     #
     ne_ave, ni_ave = [], []
