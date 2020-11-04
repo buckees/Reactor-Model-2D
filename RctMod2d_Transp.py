@@ -82,7 +82,7 @@ class Transp2d(object):
                 fig.colorbar(_cs, ax=_ax, shrink=0.9)
             
         elif imode == 'Scatter':
-            for _ax, _den, _title in zip(axes, (self.ne, self.ni), 
+            for _ax, _den, _title in zip(axes, (self.De, self.Di), 
                                          ('E Density', 'Ion Density')):
                 _ax.scatter(_x, _z, c=_den, s=5, cmap=colMap)
                 _ax.set_title(_title)
@@ -115,16 +115,17 @@ class Transp2d(object):
             fig, axes = plt.subplots(2, 1, figsize=figsize, dpi=dpi,
                                      constrained_layout=True)
         # plot flux
-        ax = axes[0]
-        ax.scatter(_x, _z, c=self.fluxe, s=1, cmap=colMap, vmin=0.2)
-        ax.set_title('E Flux')
-        ax.set_xlabel('Position (m)')
-        ax.set_ylabel('Height (m)')
-        ax = axes[1]
-        ax.scatter(_x, _z, c=self.fluxi, s=1, cmap=colMap, vmin=0.2)
-        ax.set_title('Ion Flux')
-        ax.set_xlabel('Position (m)')
-        ax.set_ylabel('Height (m)')
+        if imode == 'Contour':
+            for _ax, _den, _title in zip(axes, (self.fluxex, self.fluxez), 
+                            ('E flux in x', 'E flux in z')):
+                _cs = _ax.contourf(_x, _z, _den, cmap=colMap)
+                _ax.set_title(_title)
+                fig.colorbar(_cs, ax=_ax, shrink=0.9)
+        
+        for ax in axes:
+            ax.set_xlabel('Position (m)')
+            ax.set_ylabel('Height (m)')
+            ax.set_aspect('equal')
         fig.savefig(fname, dpi=dpi)
 
 
@@ -236,6 +237,9 @@ if __name__ == '__main__':
         ihoriz = 1
     pla2d.plot_plasma(figsize=figsize, ihoriz=ihoriz)
     
-    txp2d = Transp2d(pla2d)
+    txp2d = Ambi2d(pla2d)
     txp2d.calc_transp_coeff(pla2d)
     txp2d.plot_transp_coeff(pla=pla2d, figsize=figsize, ihoriz=ihoriz)
+    txp2d.calc_ambi(pla2d)
+    txp2d.plot_flux(pla=pla2d, figsize=figsize, ihoriz=ihoriz)
+    
