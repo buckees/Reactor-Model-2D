@@ -27,16 +27,17 @@ class Power2d(object):
         """Print eon energy module."""
         return f'power input = {self.input}'
     
-    def calc_pwr_in(self, pla):
+    def calc_pwr_in(self, pla, pwr=1.0):
         """
         Calc input power.
 
         pla: Plasma2d object
              calc uses pla.Te,i and pla.coll_em
+        pwr: W, var, input power from input
         input: W, (nz, nx) matrix, power input
         """
         # calc thermal conductivity for eon
-        self.input = np.ones_like(pla.ne)*1.0
+        self.input = np.ones_like(pla.ne)*pwr
     
     def plot_power(self, figsize=(8, 8), ihoriz=1, 
                     dpi=300, fname='Power.png', imode='Contour'):
