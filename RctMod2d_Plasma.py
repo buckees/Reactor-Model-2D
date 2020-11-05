@@ -11,6 +11,7 @@ from Constants import AMU
 import numpy as np
 from copy import copy, deepcopy
 import matplotlib.pyplot as plt
+import matplotlib.patches as patch
 import matplotlib.cm as cm
 colMap = copy(cm.get_cmap("jet"))
 colMap.set_under(color='white')
@@ -127,6 +128,18 @@ class Plasma2d(object):
             ax.set_xlabel('Position (m)')
             ax.set_ylabel('Height (m)')
             ax.set_aspect('equal')
+            
+            # add geom plot
+            color_dict = {0:'white', 1:'black', 2:'green', 3:'yellow', 
+                          4:'purple'}
+            for shape in self.mesh.geom.sequence:
+                if shape.type == 'Rectangle':
+                    temp_col = color_dict[self.mesh.geom.label[shape.label]]
+                    ax.add_patch(
+                        patch.Rectangle(shape.bl, shape.width, shape.height,
+                                        facecolor=temp_col, edgecolor='w')
+                        )
+        
         fig.savefig(fname, dpi=dpi)
         plt.close()
     
