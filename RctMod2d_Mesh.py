@@ -70,7 +70,7 @@ class Mesh2d():
             _posn = np.array([_x, _z])
             _label, self.mat[_idx] = self.geom.get_label(_posn)
     
-    def _calc_plasma_are(self):
+    def _calc_plasma_area(self):
         """Calc the total area of plasma region."""
         self.area = 0
         for _idx, _mat in np.ndenumerate(self.mat):
