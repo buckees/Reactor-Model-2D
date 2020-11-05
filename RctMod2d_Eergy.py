@@ -69,11 +69,11 @@ class Eergy2d(object):
         self.Qez -= np.multiply(self.th_cond_e, self.dTez)
         self.dQe -= np.multiply(self.th_cond_e, self.d2Te)
 
-    def _set_nonPlasma(self, Te_bc=0.1):
+    def _set_nonPlasma(self, pla, Te_bc=0.1):
         """Impose fixed Te on the non-plasma materials."""
-        for _idx, _mat in np.ndenumerate(self.mesh.mat):
+        for _idx, _mat in np.ndenumerate(pla.mesh.mat):
             if _mat:
-                self.Te[_idx] = 0.1
+                self.Te[_idx] = Te_bc
         
     def calc_Te(self, delt, pla, txp):
         """
