@@ -69,11 +69,17 @@ class Eergy2d(object):
         self.Qez -= np.multiply(self.th_cond_e, self.dTez)
         self.dQe -= np.multiply(self.th_cond_e, self.d2Te)
 
+    def _set_bc(self, pla, Te_bc=0.1):
+        """Impose b.c. on the Te."""
+        for _idx in pla.mesh.bndy_list:
+            self.Te[_idx] = Te_bc
+
     def _set_nonPlasma(self, pla, Te_bc=0.1):
         """Impose fixed Te on the non-plasma materials."""
         for _idx, _mat in np.ndenumerate(pla.mesh.mat):
             if _mat:
                 self.Te[_idx] = Te_bc
+   
         
     def calc_Te(self, delt, pla, txp):
         """
@@ -87,5 +93,6 @@ class Eergy2d(object):
         self._calc_th_flux(pla, txp)
         self.ergy_e += (-self.dQe + self.pwr)*delt
         self.Te = np.divide(self.ergy_e, pla.ne)/1.5/KB_EV
+        self._set_bc(pla)
         self._set_nonPlasma(pla)
         
