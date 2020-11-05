@@ -39,7 +39,7 @@ class Power2d(object):
         # calc thermal conductivity for eon
         self.input = np.ones_like(pla.ne)*pwr
     
-    def plot_power(self, figsize=(8, 8), ihoriz=1, 
+    def plot_power(self, pla, figsize=(8, 8), ihoriz=1, 
                     dpi=300, fname='Power.png', imode='Contour'):
         """
         Plot power vs. position.
@@ -51,7 +51,7 @@ class Power2d(object):
         fname: str, var, name of png file to save
         imode: str, var, ['Contour', 'Scatter']
         """
-        _x, _z = self.mesh.x, self.mesh.z
+        _x, _z = pla.mesh.x, pla.mesh.z
         if ihoriz:
             fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
                                      constrained_layout=True)
