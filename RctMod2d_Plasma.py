@@ -58,11 +58,11 @@ class Plasma2d(object):
         self.coll_em = np.ones_like(_x)*(press/10.0*1e7)  # eon coll freq (mom)
         self.coll_im = np.ones_like(_x)*(press/10.0*1e7)  # ion coll freq (mom)
         self.Mi = Mi*AMU # ion mass 
-        self.set_bc()
-        self.set_nonPlasma()
-        self.limit_plasma()
+        self._set_bc()
+        self._set_nonPlasma()
+        self._limit_plasma()
 
-    def set_bc(self):
+    def _set_bc(self):
         """Impose b.c. on the plasma."""
         for _idx in self.mesh.bndy_list:
             self.ne[_idx] = 1e11
@@ -71,7 +71,7 @@ class Plasma2d(object):
             self.Te[_idx] = 0.1
             self.Ti[_idx] = 0.01
 
-    def set_nonPlasma(self):
+    def _set_nonPlasma(self):
         """Impose fixed values on the non-plasma materials."""
         for _idx, _mat in np.ndenumerate(self.mesh.mat):
             if _mat:
@@ -81,7 +81,7 @@ class Plasma2d(object):
                 self.Te[_idx] = 0.1
                 self.Ti[_idx] = 0.01
 
-    def limit_plasma(self, n_min=1e11, n_max=1e22, T_min=0.001, T_max=100.0):
+    def _limit_plasma(self, n_min=1e11, n_max=1e22, T_min=0.001, T_max=100.0):
         """Limit variables in the plasma."""
         self.ne = np.clip(self.ne, n_min, n_max)
         self.ni = np.clip(self.ni, n_min, n_max)
@@ -215,6 +215,9 @@ class Plasma2d(object):
         """
         self.ne += (-txp.dfluxe + src.se)*delt
         self.ni += (-txp.dfluxi + src.si)*delt
+        self._set_bc()
+        self._set_nonPlasma()
+        self._limit_plasma()
 
 
 if __name__ == '__main__':
