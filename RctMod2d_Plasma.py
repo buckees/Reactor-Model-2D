@@ -109,13 +109,11 @@ class Plasma2d(object):
             fig, axes = plt.subplots(2, 1, figsize=figsize, dpi=dpi,
                                      constrained_layout=True)
         
-        _levels = np.linspace(1e11, 1e17, 11)
         # plot densities
         if imode == 'Contour':
             for _ax, _den, _title in zip(axes, (self.ne, self.ni), 
                                          ('E Density', 'Ion Density')):
-                _cs = _ax.contourf(_x, _z, _den, cmap=colMap, 
-                                   levels=_levels, vmin=1.1e11)
+                _cs = _ax.contourf(_x, _z, _den, cmap=colMap, vmin=1.1e11)
                 _ax.set_title(_title)
                 fig.colorbar(_cs, ax=_ax, shrink=0.9)
             
