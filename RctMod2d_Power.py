@@ -48,7 +48,7 @@ class Power2d(object):
         elif imode == 'ne':
             self.input = pla.ne/pla.ne.sum()*pwr
     
-    def plot_power(self, pla, figsize=(8, 8), ihoriz=1, 
+    def plot_pwr(self, pla, figsize=(8, 8), ihoriz=1, 
                     dpi=300, fname='Power.png', imode='Contour'):
         """
         Plot power vs. position.
