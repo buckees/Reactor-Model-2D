@@ -127,6 +127,7 @@ class Transp2d(object):
             ax.set_ylabel('Height (m)')
             ax.set_aspect('equal')
         fig.savefig('Eon_'+fname, dpi=dpi)
+        plt.close()
         
         # plot dflux
         if ihoriz:
