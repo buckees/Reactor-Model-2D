@@ -79,55 +79,54 @@ een2d = Eergy2d(pla2d)
 een2d.get_pwr(pwr2d)
 
 
-ne_ave, ni_ave = [], []
-time = []
 dt = 1e-3
 niter = 30
 for itn in range(niter):
     txp2d.calc_ambi(pla2d)
     pla2d.den_evolve(dt, txp2d, src2d)
-    ne_ave.append(pla2d.ne.mean())
-    ni_ave.append(pla2d.ni.mean())
-    time.append(dt*(itn+1))
     if not (itn+1) % (niter/3):
         # txp2d.plot_flux(pla2d)
         pla2d.plot_plasma(fname=f'plasma_itn{itn+1}', 
                           figsize=figsize, ihoriz=ihoriz)
         # txp2d.plot_flux(pla=pla2d, fname=f'flux_itn{itn+1}',
         #                 figsize=figsize, ihoriz=ihoriz)
-fig = plt.figure(figsize=(4, 4), dpi=300)
-plt.plot(time, ne_ave, 'b-')
-plt.plot(time, ni_ave, 'r-')
-plt.legend(['E', 'Ion'])
-plt.xlabel('Time (s)')
-plt.ylabel('Ave. Density (m^-3)')
-fig.savefig('Density_vs_Time.png', dpi=300)
-plt.close()
 
 
-
-Te_ave = []
+ne_ave, ni_ave, Te_ave = [], [], []
 time = []
 dt = 1e-3
 niter = 3000
-
-pla2d.plot_Te(fname='Te_itn0.png', 
-              figsize=figsize, ihoriz=ihoriz)
 
 for itn in range(niter):
     txp2d.calc_ambi(pla2d)
     een2d.get_pwr(pwr2d)
     een2d.calc_Te(dt, pla2d, txp2d)
     pla2d.get_Te(een2d)
+    pla2d.den_evolve(dt, txp2d, src2d)
+    ne_ave.append(pla2d.ne.mean())
+    ni_ave.append(pla2d.ni.mean())
     Te_ave.append(pla2d.Te.mean())
     time.append(dt*(itn+1))
     if not (itn+1) % (niter/10):
         pla2d.plot_Te(fname=f'Te_itn{itn+1}', 
                           figsize=figsize, ihoriz=ihoriz)
-fig = plt.figure(figsize=(4, 4), dpi=300)
-plt.plot(time, Te_ave, 'b-')
-plt.legend(['Te'])
+
+# plot ave. values
+fig, axes = plt.subplots(2, 1, figsize=(8,4), dpi=300,
+                                     constrained_layout=True)
+ax = axes[0]
+ax.plot(time, ne_ave, 'b-')
+ax.legend(['ne'])
+ax.set_title('Eon Density (m^-3)')
 plt.xlabel('Time (s)')
-plt.ylabel('Ave. Te (eV)')
-fig.savefig('Te_vs_Time.png', dpi=300)
+plt.ylabel('Ave. Density (m^-3)')
+
+ax = axes[1]
+ax.plot(time, Te_ave, 'r-')
+ax.legend(['Te'])
+ax.set_title('Eon Temperature (eV)')
+plt.xlabel('Time (s)')
+plt.ylabel('Ave. Eon Temperature (eV)')
+
+fig.savefig('Ave_vs_Time.png', dpi=300)
 plt.close()
