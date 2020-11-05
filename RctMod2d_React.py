@@ -34,6 +34,21 @@ class React2d(object):
         self.Se = np.multiply(self.Se, self.ke)
         self.Si = np.multiply(pla.ne, pla.nn)
         self.Si = np.multiply(self.Si, self.ke)
+        self._set_bc(pla)
+        self._set_nonPlasma(pla)
+        
+    def _set_bc(self, pla):
+        """Impose b.c. on the src."""
+        for _idx in pla.mesh.bndy_list:
+            self.Se[_idx] = 0.0
+            self.Si[_idx] = 0.0
+
+    def _set_nonPlasma(self, pla):
+        """Impose fixed Te on the non-plasma materials."""
+        for _idx, _mat in np.ndenumerate(pla.mesh.mat):
+            if _mat:
+                self.Se[_idx] = 0.0
+                self.Si[_idx] = 0.0
         
     def plot_src(self, pla, figsize=(8, 8), ihoriz=1, 
                     dpi=300, fname='Power.png', imode='Contour'):
