@@ -24,16 +24,16 @@ class React2d(object):
     
     def __init__(self, pla):
         """Import geometry information."""
-        self.se = np.zeros_like(pla.ne)  # initial eon flux
-        self.si = np.zeros_like(pla.ne)  # initial ion flux
+        self.Se = np.zeros_like(pla.ne)  # initial eon flux
+        self.Si = np.zeros_like(pla.ne)  # initial ion flux
     
-    def calc_src(self, pla, ke=1.0):
+    def calc_src(self, pla, ke=1e-17):
         """Calc src due to ionization."""
         self.ke = ke * np.sqrt(pla.Te)
-        self.se = np.multiply(pla.ne, pla.nn)
-        self.se = np.multiply(self.se, self.ke)
-        self.si = np.multiply(pla.ne, pla.nn)
-        self.si = np.multiply(self.si, self.ke)
+        self.Se = np.multiply(pla.ne, pla.nn)
+        self.Se = np.multiply(self.Se, self.ke)
+        self.Si = np.multiply(pla.ne, pla.nn)
+        self.Si = np.multiply(self.Si, self.ke)
         
     def plot_src(self, pla, figsize=(8, 8), ihoriz=1, 
                     dpi=300, fname='Power.png', imode='Contour'):
