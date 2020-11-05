@@ -61,6 +61,7 @@ class Mesh2d():
         self.mat = np.zeros_like(self.x)
         self._find_bndy()
         self._assign_mat()
+        self._calc_plasma_area()
     
     def _assign_mat(self):
         """Assign materials to nodes."""
@@ -68,6 +69,13 @@ class Mesh2d():
             _z = self.z[_idx]
             _posn = np.array([_x, _z])
             _label, self.mat[_idx] = self.geom.get_label(_posn)
+    
+    def _calc_plasma_are(self):
+        """Calc the total area of plasma region."""
+        self.area = 0
+        for _idx, _mat in np.ndenumerate(self.mat):
+            if not _mat:
+                self.area += self.delx * self.delz
 
     def plot(self, figsize=(8, 8), dpi=600, fname='Mesh.png'):
         """Plot mesh."""
