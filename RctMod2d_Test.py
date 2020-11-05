@@ -6,6 +6,11 @@ Plasma_2d contains:
     temperature: copy from energy module    
 """
 
+import os
+import glob
+for i in glob.glob("*.png"):
+    os.remove(i)
+
 from Constants import AMU
 import numpy as np
 from copy import copy, deepcopy
@@ -63,18 +68,21 @@ pla2d.plot_Te(figsize=figsize, ihoriz=ihoriz)
 # txp2d = Diff_2d(pla2d)
 txp2d = Ambi2d(pla2d)
 txp2d.calc_transp_coeff(pla2d)
+txp2d.calc_ambi(pla2d)
 # txp2d.plot_transp_coeff(pla2d)
 # init React module
 src2d = React_2d(pla2d)
-# init Eergy module
-een2d = Eergy2d(pla2d)
 # init Power module
 pwr2d = Power2d(pla2d)
-#
+# init Eergy module
+een2d = Eergy2d(pla2d)
+een2d.get_pwr(pwr2d)
+
+
 ne_ave, ni_ave = [], []
 time = []
 dt = 1e-3
-niter = 3000
+niter = 30
 for itn in range(niter):
     txp2d.calc_ambi(pla2d)
     pla2d.den_evolve(dt, txp2d, src2d)
@@ -83,7 +91,7 @@ for itn in range(niter):
     ne_ave.append(pla2d.ne.mean())
     ni_ave.append(pla2d.ni.mean())
     time.append(dt*(itn+1))
-    if not (itn+1) % (niter/10):
+    if not (itn+1) % (niter/3):
         # txp2d.plot_flux(pla2d)
         pla2d.plot_plasma(fname=f'plasma_itn{itn+1}', 
                           figsize=figsize, ihoriz=ihoriz)
@@ -96,3 +104,37 @@ plt.legend(['E', 'Ion'])
 plt.xlabel('Time (s)')
 plt.ylabel('Ave. Density (m^-3)')
 fig.savefig('Density_vs_Time.png', dpi=300)
+plt.close()
+
+
+
+Te_ave = []
+time = []
+dt = 1e-10
+niter = 3000
+
+pla2d.plot_Te(fname='init_Te_01.png', 
+              figsize=figsize, ihoriz=ihoriz)
+
+een2d.calc_Te(dt, pla2d, txp2d)
+pla2d.get_Te(een2d)
+pla2d.plot_Te(fname='init_Te_02.png', 
+              figsize=figsize, ihoriz=ihoriz)
+
+for itn in range(niter):
+    txp2d.calc_ambi(pla2d)
+    een2d.get_pwr(pwr2d)
+    een2d.calc_Te(dt, pla2d, txp2d)
+    pla2d.get_Te(een2d)
+    Te_ave.append(pla2d.Te.mean())
+    time.append(dt*(itn+1))
+    if not (itn+1) % (niter/10):
+        pla2d.plot_Te(fname=f'Te_itn{itn+1}', 
+                          figsize=figsize, ihoriz=ihoriz)
+fig = plt.figure(figsize=(4, 4), dpi=300)
+plt.plot(time, Te_ave, 'b-')
+plt.legend(['Te'])
+plt.xlabel('Time (s)')
+plt.ylabel('Ave. Te (eV)')
+fig.savefig('Te_vs_Time.png', dpi=300)
+plt.close()
