@@ -86,8 +86,6 @@ niter = 30
 for itn in range(niter):
     txp2d.calc_ambi(pla2d)
     pla2d.den_evolve(dt, txp2d, src2d)
-    pla2d.set_bc()
-    pla2d.limit_plasma()
     ne_ave.append(pla2d.ne.mean())
     ni_ave.append(pla2d.ni.mean())
     time.append(dt*(itn+1))
@@ -110,15 +108,10 @@ plt.close()
 
 Te_ave = []
 time = []
-dt = 1e-10
+dt = 1e-3
 niter = 3000
 
-pla2d.plot_Te(fname='init_Te_01.png', 
-              figsize=figsize, ihoriz=ihoriz)
-
-een2d.calc_Te(dt, pla2d, txp2d)
-pla2d.get_Te(een2d)
-pla2d.plot_Te(fname='init_Te_02.png', 
+pla2d.plot_Te(fname='Te_itn0.png', 
               figsize=figsize, ihoriz=ihoriz)
 
 for itn in range(niter):
