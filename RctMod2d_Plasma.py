@@ -213,8 +213,8 @@ class Plasma2d(object):
         txp: Transp2d() object
         src: React2d() object
         """
-        self.ne += (-txp.dfluxe + src.se)*delt
-        self.ni += (-txp.dfluxi + src.si)*delt
+        self.ne += (-txp.dfluxe + src.Se)*delt
+        self.ni += (-txp.dfluxi + src.Si)*delt
         self._set_bc()
         self._set_nonPlasma()
         self._limit_plasma()
