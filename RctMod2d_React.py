@@ -31,7 +31,7 @@ class React2d(object):
         """Calc src due to ionization."""
         self.Se = ke * np.power(pla.Te, 0.59)
         self.Se *= np.exp(-17.8/pla.Te)
-        self.Se *= np.exp(pla.ne, pla.nn)
+        self.Se *= np.multiply(pla.ne, pla.nn)
         self.Si = deepcopy(self.Se)
         self._set_bc(pla)
         self._set_nonPlasma(pla)
