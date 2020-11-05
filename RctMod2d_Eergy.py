@@ -79,7 +79,10 @@ class Eergy2d(object):
         for _idx, _mat in np.ndenumerate(pla.mesh.mat):
             if _mat:
                 self.Te[_idx] = Te_bc
-   
+
+    def _limit_Te(self, T_min=0.001, T_max=100.0):
+        """Limit Te in the plasma."""
+        self.Te = np.clip(self.Te, T_min, T_max)
         
     def calc_Te(self, delt, pla, txp):
         """
@@ -95,4 +98,5 @@ class Eergy2d(object):
         self.Te = np.divide(self.ergy_e, pla.ne)/1.5/KB_EV
         self._set_bc(pla)
         self._set_nonPlasma(pla)
+        self._limit_Te()
         
