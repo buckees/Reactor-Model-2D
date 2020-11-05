@@ -79,6 +79,7 @@ class Mesh2d():
         ax = axes[1]
         ax.scatter(self.x, self.z, c=self.bndy, s=10, cmap=colMap)
         fig.savefig(fname, dpi=dpi)
+        plt.close()
 
     def cnt_diff(self, f):
         """

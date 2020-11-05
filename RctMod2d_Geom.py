@@ -203,6 +203,7 @@ class Geom2d():
             ax.set_xlim(self.bl[0], self.bl[0] + self.domain[0])
             ax.set_ylim(self.bl[1], self.bl[1] + self.domain[1])
         fig.savefig(fname, dpi=dpi)
+        plt.close()
                 
 if __name__ == '__main__':
     geom2d = Geom2d(name='2D Plasma', is_cyl=False)
