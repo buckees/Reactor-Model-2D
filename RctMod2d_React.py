@@ -14,12 +14,11 @@ Transp_1d contains:
 
 import numpy as np
 
-class React_2d(object):
+class React2d(object):
     """Define the base tranport module/object."""
     
     def __init__(self, pla):
         """Import geometry information."""
-        _x = pla.mesh.x
-        self.se = np.zeros_like(_x)  # initial eon flux
-        self.si = np.zeros_like(_x)  # initial ion flux
+        self.se = np.zeros_like(pla.ne)  # initial eon flux
+        self.si = np.zeros_like(pla.ne)  # initial ion flux
         
