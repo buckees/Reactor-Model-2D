@@ -27,17 +27,26 @@ class Power2d(object):
         """Print eon energy module."""
         return f'power input = {self.input}'
     
-    def calc_pwr_in(self, pla, pwr=1.0):
+    def calc_pwr_in(self, pla, pwr=1.0, imode='Uniform'):
         """
         Calc input power.
 
         pla: Plasma2d object
              calc uses pla.Te,i and pla.coll_em
-        pwr: W, var, input power from input
+        pwr: W, var, total input power from external
+        imode: str, var, ['Uniform', 'ne'], how input power is distributed 
+              into the plasma
         input: W, (nz, nx) matrix, power input
         """
-        # calc thermal conductivity for eon
-        self.input = np.ones_like(pla.ne)*pwr
+        if imode in ['Uniform', 'ne']:
+            pass
+        else:
+            return print('imode is not recognized in calc_pwr_in()')
+        pwr = pwr/pla.mesh.area
+        if imode == 'Uniform':
+            self.input = np.ones_like(pla.ne)*pwr
+        elif imode == 'ne':
+            self.input = pla.ne/pla.ne.sum()*pwr
     
     def plot_power(self, pla, figsize=(8, 8), ihoriz=1, 
                     dpi=300, fname='Power.png', imode='Contour'):
