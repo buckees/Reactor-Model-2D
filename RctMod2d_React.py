@@ -27,13 +27,12 @@ class React2d(object):
         self.Se = np.zeros_like(pla.ne)  # initial eon flux
         self.Si = np.zeros_like(pla.ne)  # initial ion flux
     
-    def calc_src(self, pla, ke=1e-17):
+    def calc_src(self, pla, ke=2.34e-14):
         """Calc src due to ionization."""
-        self.ke = ke * np.sqrt(pla.Te)
-        self.Se = np.multiply(pla.ne, pla.nn)
-        self.Se = np.multiply(self.Se, self.ke)
-        self.Si = np.multiply(pla.ne, pla.nn)
-        self.Si = np.multiply(self.Si, self.ke)
+        self.Se = ke * np.power(pla.Te, 0.59)
+        self.Se *= np.exp(-17.8/pla.Te)
+        self.Se *= np.exp(pla.ne, pla.nn)
+        self.Si = deepcopy(self.Se)
         self._set_bc(pla)
         self._set_nonPlasma(pla)
         
