@@ -278,8 +278,6 @@ if __name__ == '__main__':
     for itn in range(niter):
         txp2d.calc_ambi(pla2d)
         pla2d.den_evolve(dt, txp2d, src2d)
-        pla2d.set_bc()
-        pla2d.limit_plasma()
         ne_ave.append(pla2d.ne.mean())
         ni_ave.append(pla2d.ni.mean())
         time.append(dt*(itn+1))
