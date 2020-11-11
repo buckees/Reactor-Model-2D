@@ -12,6 +12,10 @@ import matplotlib.pyplot as plt
 class Mesh2d():
     """Define 2d Mesh."""
 
+    def import_geom(self, geom):
+            """Import geometry."""
+            self.geom = geom
+    
     def create_mesh(self, bl=(0.0, 0.0), domain=(1.0, 1.0), ngrid=(11, 11)):
         """Create standalone mesh."""
         self.bl = np.asarray(bl)
@@ -42,10 +46,6 @@ class Mesh2d():
         for idx in self.bndy_list:
             self.bndy[idx] = 1
 
-    def import_geom(self, geom):
-        """Import geometry."""
-        self.geom = geom
-    
     def generate_mesh(self, ngrid=(11, 11)):
         """Generate mesh according to the imported geometry."""
         self.width, self.height = self.geom.domain
