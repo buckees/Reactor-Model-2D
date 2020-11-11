@@ -178,7 +178,7 @@ class Geom2d():
         dpi: dimless, int, Dots Per Inch
         """
         color_dict = {0:'white', 1:'black', 2:'green', 3:'yellow', 
-                      4:'purple'}
+                      4:'blue', 5:'pink', 6:'purple'}
         fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
                          constrained_layout=True)
         ax = axes[0]
