@@ -170,7 +170,7 @@ class Geom2d():
         posn_label = self.get_label(posn)
         return res or (posn_label == label)
     
-    def plot(self, figsize=(8, 8), dpi=300, fname='Geometry'):
+    def plot(self, figsize=(8, 8), dpi=300, fname='Geometry', ihoriz=1):
         """
         Plot the geometry.
         
@@ -179,8 +179,12 @@ class Geom2d():
         """
         color_dict = {0:'white', 1:'black', 2:'green', 3:'yellow', 
                       4:'blue', 5:'pink', 6:'purple'}
-        fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
-                         constrained_layout=True)
+        if ihoriz:
+            fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
+        else:
+            fig, axes = plt.subplots(2, 1, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
         ax = axes[0]
         
         for shape in self.sequence:
