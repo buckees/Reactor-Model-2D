@@ -77,11 +77,16 @@ class Mesh2d():
             if not _mat:
                 self.area += self.delx * self.delz
 
-    def plot(self, figsize=(8, 8), dpi=600, fname='Mesh.png'):
+    def plot(self, figsize=(8, 8), dpi=600, fname='Mesh.png',  ihoriz=1):
         """Plot mesh."""
         colMap = plt.get_cmap('Set1')
-        fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
-                                 constrained_layout=True)
+        
+        if ihoriz:
+            fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
+        else:
+            fig, axes = plt.subplots(2, 1, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
         ax = axes[0]
         ax.scatter(self.x, self.z, c=self.mat, s=10, cmap=colMap)
         ax = axes[1]
