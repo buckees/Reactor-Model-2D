@@ -1,11 +1,13 @@
 """
-Geometry module.
+Geometry module 2D, constructing the 2D geometry.
 
-Geometry module defines the basic shapes, such as 
-1D: Interval 
+Defines the basic shapes, such as 
 2D: Rectangle, Triangle, etc.
+Assign materials to the shapes, such as
+'Metal', 'Quartz', 'Coil'
 
-Geometry module defines the construction of the geometry.
+2D geometry is defined separately from 1D geometry,
+but they share the same strucuture.
 """
 
 import matplotlib.pyplot as plt
@@ -60,6 +62,7 @@ class Rectangle(Shape):
         
         bottom_left: unit in m, (2, ) tuple
         up_right: unit in m, (2, ) tuple
+        type: str, var, type of Shape
         """
         super().__init__(label)
         self.bl = np.asarray(bottom_left)
