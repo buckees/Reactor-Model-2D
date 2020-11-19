@@ -173,7 +173,7 @@ class Geom2d():
         posn_label = self.get_label(posn)
         return res or (posn_label == label)
     
-    def plot(self, figsize=(8, 8), dpi=300, fname='Geometry', ihoriz=1):
+    def plot(self, figsize=(8, 8), dpi=300, ihoriz=1):
         """
         Plot the geometry.
         
@@ -209,7 +209,7 @@ class Geom2d():
         for ax in axes:
             ax.set_xlim(self.bl[0], self.bl[0] + self.domain[0])
             ax.set_ylim(self.bl[1], self.bl[1] + self.domain[1])
-        fig.savefig(fname, dpi=dpi)
+        fig.savefig(self.name, dpi=dpi)
         plt.close()
                 
 if __name__ == '__main__':
