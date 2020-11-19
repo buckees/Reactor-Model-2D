@@ -91,7 +91,8 @@ class Plasma2d(object):
         self.Ti = np.clip(self.Ti, T_min, T_max)
 
     def plot_plasma(self, figsize=(8, 8), ihoriz=1, 
-                    dpi=300, fname='Plasma.png', imode='Contour'):
+                    dpi=300, fname='Plasma.png', imode='Contour',
+                    iplot_geom=0):
         """
         Plot plasma variables vs. position.
             
@@ -130,15 +131,16 @@ class Plasma2d(object):
             ax.set_aspect('equal')
             
             # add geom plot
-            color_dict = {0:'white', 1:'black', 2:'green', 3:'yellow', 
-                          4:'purple'}
-            for shape in self.mesh.geom.sequence:
-                if shape.type == 'Rectangle':
-                    temp_col = color_dict[self.mesh.geom.label[shape.label]]
-                    ax.add_patch(
-                        patch.Rectangle(shape.bl, shape.width, shape.height,
-                                        facecolor=temp_col, edgecolor='w')
-                        )
+            if iplot_geom:
+                color_dict = {0:'white', 1:'black', 2:'green', 3:'yellow',
+                              4:'grey'}
+                for shape in self.mesh.geom.sequence:
+                    if shape.type == 'Rectangle':
+                        temp_col = color_dict[self.mesh.geom.label[shape.label]]
+                        ax.add_patch(
+                            patch.Rectangle(shape.bl, shape.width, shape.height,
+                                            facecolor=temp_col, edgecolor='w')
+                            )
         
         fig.savefig(fname, dpi=dpi)
         plt.close()
