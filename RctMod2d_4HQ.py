@@ -86,7 +86,7 @@ print(geom2d)
 mesh2d = Mesh2d()
 mesh2d.import_geom(geom2d)
 mesh2d.generate_mesh(ngrid=(51, 41))
-mesh2d.plot(figsize=(5, 8), ihoriz=0)
+mesh2d.plot(figsize=(10, 4), ihoriz=1)
 
 
 pla2d = Plasma2d(mesh2d)
@@ -121,14 +121,15 @@ een2d = Eergy2d(pla2d)
 een2d.get_pwr(pwr2d)
 
 pla2d.plot_plasma(fname='plasma_itn0', 
-                          figsize=figsize, ihoriz=ihoriz)
+                  figsize=figsize, ihoriz=ihoriz,
+                  iplot_geom=0)
 
-dt = 1e-3
-niter = 30
+dt = 1e-5
+niter = 100
 for itn in range(niter):
     txp2d.calc_ambi(pla2d)
     pla2d.den_evolve(dt, txp2d, src2d)
-    if not (itn+1) % (niter/3):
+    if not (itn+1) % (niter/10):
         # txp2d.plot_flux(pla2d)
         pla2d.plot_plasma(fname=f'plasma_itn{itn+1}', 
                           figsize=figsize, ihoriz=ihoriz)
@@ -138,8 +139,8 @@ for itn in range(niter):
 
 ne_ave, ni_ave, Te_ave = [], [], []
 time = []
-niter = 3000
-dt = 1e-4
+niter = 10000
+dt = 1e-5
 niter_Te = 30
 for itn in range(niter):
     pwr2d.calc_pwr_in(pla2d, pwr=100.0, imode='ne')
