@@ -15,3 +15,5 @@ EV2K = 11600.0  # 1 eV = 1160 K, unit in K/eV
 K2EV = 1/EV2K  # 1 K = 8.621738e-5 eV, unit in eV/K
 KB = 1.38064852e-23  # Boltzmann Constant, unit in m2*kg*s-2*K-1 or J/K
 KB_EV = KB*EV2K  # Boltzmann Constant, unit in J/eV
+color_dict = {0:'white', 1:'black', 2:'green', 3:'yellow', 
+                      4:'blue', 5:'pink', 6:'grey'}
