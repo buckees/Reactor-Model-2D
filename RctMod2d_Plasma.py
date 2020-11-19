@@ -6,7 +6,7 @@ Plasma_2d contains:
     temperature: copy from energy module    
 """
 
-from Constants import AMU
+from Constants import AMU, color_dict
 
 import numpy as np
 from copy import copy, deepcopy
@@ -132,8 +132,6 @@ class Plasma2d(object):
             
             # add geom plot
             if iplot_geom:
-                color_dict = {0:'white', 1:'black', 2:'green', 3:'yellow',
-                              4:'grey'}
                 for shape in self.mesh.geom.sequence:
                     if shape.type == 'Rectangle':
                         temp_col = color_dict[self.mesh.geom.label[shape.label]]

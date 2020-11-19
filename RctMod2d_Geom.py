@@ -10,6 +10,8 @@ Assign materials to the shapes, such as
 but they share the same strucuture.
 """
 
+from Constants import color_dict
+
 import matplotlib.pyplot as plt
 import matplotlib.patches as patch
 import numpy as np
@@ -179,9 +181,7 @@ class Geom2d():
         
         figsize: unit in inch, (2, ) tuple, determine the fig/canvas size
         dpi: dimless, int, Dots Per Inch
-        """
-        color_dict = {0:'white', 1:'black', 2:'green', 3:'yellow', 
-                      4:'blue', 5:'pink', 6:'grey'}
+        """ 
         if ihoriz:
             fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
                                      constrained_layout=True)
