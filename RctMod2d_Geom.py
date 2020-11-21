@@ -93,7 +93,7 @@ class Rectangle(Shape):
 class Geom2d():
     """Constuct the 2D geometry."""
     
-    def __init__(self, name='Geometry', is_cyl=False):
+    def __init__(self, name='Geom2d', is_cyl=False):
         """
         Init the geometry.
         
@@ -213,7 +213,7 @@ class Geom2d():
         plt.close()
                 
 if __name__ == '__main__':
-    geom2d = Geom2d(name='2D Plasma', is_cyl=False)
+    geom2d = Geom2d(name='Geom2D_Test', is_cyl=False)
     domain = Domain((-1.0, 0.0), (2.0, 4.0))
     geom2d.add_domain(domain)
     top = Rectangle('Metal', (-1.0, 3.5), (1.0, 4.0))
