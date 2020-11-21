@@ -12,6 +12,14 @@ import matplotlib.pyplot as plt
 class Mesh2d():
     """Define 2d Mesh."""
 
+    def __init__(self, name='Mesh2d'):
+        """
+        Init the Shape.
+        
+        name: str, var, name of the Mesh2d.
+        """
+        self.name = name
+
     def import_geom(self, geom):
             """Import geometry."""
             self.geom = geom
@@ -143,7 +151,7 @@ if __name__ == '__main__':
     """Test Mesh."""
     from RctMod2d_Geom import Geom2d, Domain, Rectangle
     # build the geometry
-    geom2d = Geom2d(name='2D Plasma', is_cyl=False)
+    geom2d = Geom2d(name='Geom2D_Test', is_cyl=False)
     domain = Domain((-1.0, 0.0), (2.0, 4.0))
     geom2d.add_domain(domain)
     top = Rectangle('Metal', (-1.0, 3.5), (1.0, 4.0))
@@ -159,7 +167,7 @@ if __name__ == '__main__':
     geom2d.plot(fname='geom2d.png')
     print(geom2d)
     # generate mesh to imported geometry
-    mesh2d = Mesh2d()
+    mesh2d = Mesh2d('Mesh2D_Test')
     mesh2d.import_geom(geom2d)
     mesh2d.generate_mesh(ngrid=(21, 41))
     mesh2d.plot()
