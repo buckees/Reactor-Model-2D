@@ -47,6 +47,9 @@ class Power2d(object):
             self.input = np.ones_like(pla.ne)*pwr
         elif imode == 'ne':
             self.input = pla.ne/pla.ne.sum()*pwr
+        elif imode == 'EF':
+            temp_EF = pla.ne*pla.EF*pla.EF
+            self.input = temp_EF/temp_EF.sum()*pwr
     
     def plot_pwr(self, pla, figsize=(8, 8), ihoriz=1, 
                     dpi=300, fname='Power.png', imode='Contour'):
