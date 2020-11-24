@@ -230,6 +230,12 @@ class Plasma2d(object):
         self._set_nonPlasma()
         self._limit_plasma()
 
+    def readin_EF(self,fname):
+        """Read in E-Field from external file."""
+        temp_EF = np.fromfile(fname, dtype='f4')
+        temp_EF = np.reshape(temp_EF, (41, 51))
+        temp_EF = np.flip(temp_EF, 0)
+        self.EF = temp_EF
 
 if __name__ == '__main__':
     """Test Plasma2d."""
