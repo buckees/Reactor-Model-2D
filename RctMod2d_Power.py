@@ -38,7 +38,7 @@ class Power2d(object):
               into the plasma
         input: W, (nz, nx) matrix, power input
         """
-        if imode in ['Uniform', 'ne']:
+        if imode in ['Uniform', 'ne', 'EF']:
             pass
         else:
             return print('imode is not recognized in calc_pwr_in()')
