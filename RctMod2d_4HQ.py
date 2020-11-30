@@ -190,3 +190,13 @@ for itn in range(niter):
         
         fig.savefig('Ave_vs_Time.png', dpi=300)
         plt.close()
+
+# save matrix in numpy binary format
+np.save('cond_e', pla2d.conde)
+np.save('cond_e_real', pla2d.conde.real)
+np.save('cond_e_imag', pla2d.conde.imag)
+
+# save matrix in csv format
+np.savetxt("cond_e.csv", pla2d.conde, delimiter=",")
+np.savetxt("cond_e_real.csv", pla2d.conde.real, delimiter=",")
+np.savetxt("cond_e_imag.csv", pla2d.conde.imag, delimiter=",")
