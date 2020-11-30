@@ -152,7 +152,7 @@ class Plasma2d(object):
         self.Te = deepcopy(een.Te)
     
     def plot_Te(self, figsize=(8, 8), ihoriz=1, 
-                    dpi=300, fname='Plasma.png', imode='Contour'):
+                    dpi=300, fname='Te.png', imode='Contour'):
         """
         Plot plasma variables vs. position.
             
@@ -243,6 +243,42 @@ class Plasma2d(object):
         self.conde *= self.ne
         self.conde *= 1./complex(self.coll_em, w_rf)
     
+    def plot_conde(self, figsize=(8, 8), ihoriz=1, 
+                    dpi=300, fname='conde.png', imode='Contour'):
+        """
+        Plot eon conductivity vs. position.
+            
+        var include density, temperature.
+        figsize: a.u., (2, ) tuple, size of fig
+        ihoriz: a.u., var, 0 or 1, set the layout of fig horizontal or not
+        dpi: a.u., dots per inch
+        fname: str, var, name of png file to save
+        imode: str, var, ['Contour', 'Scatter']
+        """
+        x, z = self.mesh.x, self.mesh.z
+        if ihoriz:
+            fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
+        else:
+            fig, axes = plt.subplots(2, 1, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
+        
+        # plot eon conductivity
+        for ax, var, title in zip(axes, (self.conde.real, self.conde.imag), 
+                        ('E conductivity REAL', 'E conductivity IMAG')):
+            if imode == 'Contour':
+                cs = ax.contourf(x, z, var, cmap=colMap)
+            elif imode == 'Scatter':
+                cs = ax.scatter(x, z, c=var, s=5, cmap=colMap)
+            ax.set_title(title)
+            fig.colorbar(cs, ax=ax, shrink=0.9)
+        
+        for ax in axes:
+            ax.set_xlabel('Position (m)')
+            ax.set_ylabel('Height (m)')
+            ax.set_aspect('equal')
+        fig.savefig(fname, dpi=dpi)
+        plt.close()
 
 if __name__ == '__main__':
     """Test Plasma2d."""
