@@ -11,7 +11,7 @@ import glob
 for i in glob.glob("*.png"):
     os.remove(i)
 
-from Constants import AMU
+from Constants import PI
 import numpy as np
 from copy import copy, deepcopy
 import matplotlib.pyplot as plt
@@ -115,7 +115,8 @@ src2d.plot_src(pla=pla2d, fname='src_itn0',
                           figsize=figsize, ihoriz=ihoriz)
 # init Power module
 pwr2d = Power2d(pla2d)
-pwr2d.calc_pwr_in(pla2d, pwr=10.0, imode='ne')
+pwr2d.calc_pwr_in(pla2d, pwr=0.0, imode='ne')
+pwr2d.plot_pwr(pla2d)
 # init Eergy module
 een2d = Eergy2d(pla2d)
 een2d.get_pwr(pwr2d)
@@ -160,10 +161,15 @@ for itn in range(niter):
                           figsize=figsize, ihoriz=ihoriz)
         pla2d.plot_Te(fname=f'Te_itn{itn+1}', 
                           figsize=figsize, ihoriz=ihoriz)
+        een2d.plot_dQe(pla=pla2d, fname=f'dQe_itn{itn+1}', 
+                          figsize=figsize, ihoriz=ihoriz)
         src2d.plot_src(pla=pla2d, fname=f'src_itn{itn+1}', 
                           figsize=figsize, ihoriz=ihoriz)
         txp2d.plot_flux(pla=pla2d, fname=f'flux_itn{itn+1}',
                         figsize=figsize, ihoriz=ihoriz)
+        pla2d.calc_conde(2*PI*13.56e6)
+        pla2d.plot_conde(fname=f'conde_itn{itn+1}', 
+                          figsize=figsize, ihoriz=ihoriz)
 
         # plot ave. values
         fig, axes = plt.subplots(1, 2, figsize=(8,4), dpi=300,
