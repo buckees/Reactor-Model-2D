@@ -38,7 +38,7 @@ class Power2d(object):
               into the plasma
         input: W, (nz, nx) matrix, power input
         """
-        if imode in ['Uniform', 'ne', 'EF']:
+        if imode in ['Uniform', 'ne', 'EF', 'Top']:
             pass
         else:
             return print('imode is not recognized in calc_pwr_in()')
@@ -50,6 +50,8 @@ class Power2d(object):
         elif imode == 'EF':
             temp_EF = pla.ne*pla.EF*pla.EF
             self.input = temp_EF/temp_EF.sum()*pwr
+        elif imode == 'Top':
+            self.input = pla.mesh.z/pla.mesh.z.sum()*pwr
     
     def plot_pwr(self, pla, figsize=(8, 8), ihoriz=1, 
                     dpi=300, fname='Power.png', imode='Contour'):
