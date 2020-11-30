@@ -239,9 +239,12 @@ class Plasma2d(object):
         
     def calc_conde(self, w_rf):
         """Calc eon conductivity."""
-        self.conde = UNIT_CHARGE**2/EON_MASS
-        self.conde *= self.ne
-        self.conde *= 1./complex(self.coll_em, w_rf)
+        temp_conde = UNIT_CHARGE**2/EON_MASS
+        temp_conde *= self.ne
+        self.conde = np.zeros_like(self.ne, dtype=complex)
+        self.conde += self.coll_em
+        self.conde += complex(0.0, w_rf)
+        self.conde = np.divide(temp_conde, self.conde)
     
     def plot_conde(self, figsize=(8, 8), ihoriz=1, 
                     dpi=300, fname='conde.png', imode='Contour'):
