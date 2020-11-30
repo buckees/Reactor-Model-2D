@@ -6,7 +6,7 @@ Plasma_2d contains:
     temperature: copy from energy module    
 """
 
-from Constants import AMU, color_dict
+from Constants import AMU, color_dict, UNIT_CHARGE, EON_MASS
 
 import numpy as np
 from copy import copy, deepcopy
@@ -236,6 +236,13 @@ class Plasma2d(object):
         temp_EF = np.reshape(temp_EF, (41, 51))
         temp_EF = np.flip(temp_EF, 0)
         self.EF = temp_EF
+        
+    def calc_conde(self, w_rf):
+        """Calc eon conductivity."""
+        self.conde = UNIT_CHARGE**2/EON_MASS
+        self.conde *= self.ne
+        self.conde *= 1./complex(self.coll_em, w_rf)
+    
 
 if __name__ == '__main__':
     """Test Plasma2d."""
