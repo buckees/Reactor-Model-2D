@@ -13,7 +13,7 @@ for i in glob.glob("*.png"):
 
 from Constants import PI
 import numpy as np
-from copy import copy, deepcopy
+from copy import copy
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 colMap = copy(cm.get_cmap("jet"))
