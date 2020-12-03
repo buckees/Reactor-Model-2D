@@ -92,6 +92,9 @@ mesh2d.plot(figsize=(10, 4), ihoriz=1)
 pla2d = Plasma2d(mesh2d)
 pla2d.init_plasma(ne=1e16, Te=1.5)
 
+pla2d.get_eps()
+pla2d.plot_eps()
+
 temp_ratio = domain.domain[0]/domain.domain[1]
 if temp_ratio > 2.0:
     figsize = (4, 8)

@@ -236,7 +236,51 @@ class Plasma2d(object):
         temp_EF = np.reshape(temp_EF, (41, 51))
         temp_EF = np.flip(temp_EF, 0)
         self.EF = temp_EF
+    
+    def get_eps(self):
+        """Get epsilon from materials."""
+        self.eps = np.ones_like(self.ne)
+        for idx, mat in np.ndenumerate(self.mesh.mat):
+            if mat == 2:
+                self.eps[idx] = 3.8
         
+    def plot_eps(self, figsize=(8, 8), ihoriz=1, 
+                    dpi=300, fname='eps.png', imode='Contour'):
+        """
+        Plot eon conductivity vs. position.
+            
+        var include density, temperature.
+        figsize: a.u., (2, ) tuple, size of fig
+        ihoriz: a.u., var, 0 or 1, set the layout of fig horizontal or not
+        dpi: a.u., dots per inch
+        fname: str, var, name of png file to save
+        imode: str, var, ['Contour', 'Scatter']
+        """
+        x, z = self.mesh.x, self.mesh.z
+        if ihoriz:
+            fig, axes = plt.subplots(1, 2, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
+        else:
+            fig, axes = plt.subplots(2, 1, figsize=figsize, dpi=dpi,
+                                     constrained_layout=True)
+        
+        # plot eon conductivity
+        for ax, var, title in zip(axes, (self.eps, self.eps), 
+                        ('Dielectric Constant', 'Dielectric Constant')):
+            if imode == 'Contour':
+                cs = ax.contourf(x, z, var, cmap=colMap)
+            elif imode == 'Scatter':
+                cs = ax.scatter(x, z, c=var, s=5, cmap=colMap)
+            ax.set_title(title)
+            fig.colorbar(cs, ax=ax, shrink=0.9)
+        
+        for ax in axes:
+            ax.set_xlabel('Position (m)')
+            ax.set_ylabel('Height (m)')
+            ax.set_aspect('equal')
+        fig.savefig(fname, dpi=dpi)
+        plt.close()
+
     def calc_conde(self, w_rf):
         """Calc eon conductivity."""
         temp_conde = UNIT_CHARGE**2/EON_MASS
